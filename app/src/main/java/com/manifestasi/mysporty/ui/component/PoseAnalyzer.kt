@@ -17,10 +17,14 @@ import androidx.camera.core.ImageProxy
 import com.google.mediapipe.framework.image.BitmapImageBuilder
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 import com.google.mediapipe.tasks.core.BaseOptions
-import com.google.mediapipe.tasks.vision.core.ImageProcessingOptions
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import com.google.mediapipe.tasks.vision.poselandmarker.PoseLandmarker
+import com.manifestasi.mysporty.ml.ExcerciseClassifier
+import org.tensorflow.lite.DataType
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.io.ByteArrayOutputStream
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 
 class PoseAnalyzer(
     context: Context,
@@ -30,6 +34,8 @@ class PoseAnalyzer(
     private val poseLandmarker: PoseLandmarker
 
     private var frameCounter = 0
+
+    private val model = ExcerciseClassifier.newInstance(context)
 
     init {
         val modelPath = "pose_landmarker_full.task"
@@ -81,6 +87,52 @@ class PoseAnalyzer(
         } finally {
             imageProxy.close() // Pindahkan close() ke finally untuk memastikan tetap tertutup
         }
+    }
+
+    fun excersiseClassify(landmark: List<NormalizedLandmark>, predicted: (Int) -> Unit){
+        val xCoordinates = mutableListOf<Float>()
+        val yCoordinates = mutableListOf<Float>()
+        val zCoordinates = mutableListOf<Float>()
+
+        for (l in landmark){
+            xCoordinates.add(l.x())
+            yCoordinates.add(l.y())
+            zCoordinates.add(l.z())
+        }
+
+        val data = xCoordinates + yCoordinates + zCoordinates
+        val floatArray = data.toFloatArray()
+
+        if (floatArray.isEmpty()) {
+            Log.e("PoseAnalyzer", "Float array is empty! Skipping classification.")
+            return
+        }
+
+        val byteBuffer = ByteBuffer.allocateDirect(floatArray.size * 4)
+        byteBuffer.order(ByteOrder.nativeOrder())
+
+        for (value in floatArray) {
+            byteBuffer.putFloat(value)
+        }
+
+        byteBuffer.rewind() // Tambahkan ini untuk memastikan buffer dibaca dari awal
+
+        val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, floatArray.size), DataType.FLOAT32)
+        inputFeature0.loadBuffer(byteBuffer)
+
+        val outputs = model.process(inputFeature0)
+        val outputFeature0 = outputs.outputFeature0AsTensorBuffer
+
+        val predictedClass = outputFeature0.floatArray
+            .withIndex()
+            .maxByOrNull { it.value }
+            ?.index ?: -1
+
+        predicted(predictedClass)
+    }
+
+    fun excersiseClassifyClose(){
+        model.close()
     }
 
     private fun Image.toBitmap(rotationDegrees: Int): Bitmap {

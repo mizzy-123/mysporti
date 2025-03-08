@@ -29,9 +29,10 @@ fun DrawPoseLandmarks(landmarks: List<NormalizedLandmark>, modifier: Modifier = 
     Canvas(modifier = modifier.fillMaxSize()) {
         // Gambar lingkaran untuk setiap landmark
         landmarks.forEach { landmark ->
+            val radius = 8f * (1 - landmark.z()) // Sesuaikan radius berdasarkan nilai z
             drawCircle(
                 color = Color.Red,
-                radius = 8f,
+                radius = radius,
                 center = Offset(
                     landmark.x() * size.width,
                     landmark.y() * size.height
@@ -45,11 +46,12 @@ fun DrawPoseLandmarks(landmarks: List<NormalizedLandmark>, modifier: Modifier = 
             val endLandmark = landmarks.getOrNull(endIndex)
 
             if (startLandmark != null && endLandmark != null) {
+                val strokeWidth = 4f * (1 - (startLandmark.z() + endLandmark.z()) / 2) // Sesuaikan ketebalan garis
                 drawLine(
                     color = Color.Blue,
                     start = Offset(startLandmark.x() * size.width, startLandmark.y() * size.height),
                     end = Offset(endLandmark.x() * size.width, endLandmark.y() * size.height),
-                    strokeWidth = 4f
+                    strokeWidth = strokeWidth
                 )
             }
         }
