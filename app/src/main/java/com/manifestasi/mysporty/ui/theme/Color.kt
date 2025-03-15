@@ -9,3 +9,11 @@ val Pink80 = Color(0xFFEFB8C8)
 val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
+
+val TextFieldColor = Color(0xFFF7F8F8)
+val TextColor = Color(0xFFADA4A5)
+val TextColor2 = Color(0xFFC58BF2)
+val TextColor3 = Color(0xFFEEA4CE)
+
+val ButtonColor1 = Color(0xFF92A3FD)
+val ButtonColor2 = Color(0xFF9DCEFF)

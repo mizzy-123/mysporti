@@ -76,6 +76,9 @@ dependencies {
     // Mediapipe
     implementation(libs.tasks.vision)
 
+    // icon extended
+    implementation(libs.androidx.material.icons.extended)
+
     // hilt android
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
