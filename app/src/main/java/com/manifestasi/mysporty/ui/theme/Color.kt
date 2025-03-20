@@ -17,3 +17,11 @@ val TextColor3 = Color(0xFFEEA4CE)
 
 val ButtonColor1 = Color(0xFF92A3FD)
 val ButtonColor2 = Color(0xFF9DCEFF)
+
+val BlueColor1 = Color(0xFF92A3FD)
+val BlueColor2 = Color(0xFF9DCEFF)
+
+val Purple1 = Color(0xFFC58BF2)
+val Purple2 = Color(0xFFEEA4CE)
+
+val TextColor4 = Color(0xFFADA4A5)

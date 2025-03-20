@@ -1,5 +1,7 @@
 package com.manifestasi.mysporty.ui.screen.register
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,7 +43,9 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
-fun RegisterScreen(){
+fun RegisterScreen(
+    onNavigateToLogin: () -> Unit
+){
 
     var firstName by rememberSaveable { mutableStateOf("") }
     var lastName by rememberSaveable { mutableStateOf("") }
@@ -48,7 +53,7 @@ fun RegisterScreen(){
     var password by rememberSaveable { mutableStateOf("") }
     var visiblePassword by rememberSaveable { mutableStateOf(false) }
 
-    Surface(modifier = Modifier.fillMaxSize()) {
+    Surface(modifier = Modifier.fillMaxSize().background(Color.White)) {
         Column(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 30.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -138,6 +143,9 @@ fun RegisterScreen(){
                 )
                 Spacer(Modifier.width(8.dp))
                 Text(
+                    modifier = Modifier.clickable {
+                        onNavigateToLogin()
+                    },
                     text = "Login",
                     style = TextStyle(
                         fontFamily = poppins,
@@ -168,6 +176,8 @@ fun RegisterScreen(){
 )
 fun RegisterScreenPreview(){
     MySportyTheme {
-        RegisterScreen()
+        RegisterScreen(
+            onNavigateToLogin = {}
+        )
     }
 }
