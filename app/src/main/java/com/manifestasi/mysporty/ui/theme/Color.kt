@@ -25,3 +25,5 @@ val Purple1 = Color(0xFFC58BF2)
 val Purple2 = Color(0xFFEEA4CE)
 
 val TextColor4 = Color(0xFFADA4A5)
+
+val GrayColor1 = Color(0xFF7B6F72)

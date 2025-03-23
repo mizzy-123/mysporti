@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.manifestasi.mysporty.ui.screen.login.LoginScreen
 import com.manifestasi.mysporty.ui.screen.main.MainScreen
+import com.manifestasi.mysporty.ui.screen.main.home.detail.DetailScreen
 import com.manifestasi.mysporty.ui.screen.register.RegisterScreen
 import kotlinx.serialization.Serializable
 
@@ -44,6 +45,10 @@ fun MySportyApp(
         composable<Main> {
             MainScreen()
         }
+
+        composable<Detail> {
+            DetailScreen()
+        }
     }
 }
 
@@ -55,3 +60,6 @@ object Register
 
 @Serializable
 object Main
+
+@Serializable
+object Detail

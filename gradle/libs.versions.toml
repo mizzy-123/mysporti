@@ -1,4 +1,7 @@
 [versions]
+accompanistNavigationMaterial = "0.32.0"
+accompanistPager = "0.32.0"
+accompanistPagerIndicators = "0.32.0"
 accompanistPermissions = "0.28.0"
 agp = "8.6.0"
 cameraCore = "1.2.2"
@@ -20,6 +23,9 @@ hiltNavigationCompose = "1.0.0"
 navVersion = "2.8.9"
 
 [libraries]
+accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanistPagerIndicators" }
+accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPager" }
+accompanist-navigation-material = { module = "com.google.accompanist:accompanist-navigation-material", version.ref = "accompanistNavigationMaterial" }
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCore" }
 androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "cameraCore" }

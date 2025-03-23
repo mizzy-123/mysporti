@@ -100,4 +100,8 @@ dependencies {
     implementation(libs.androidx.navigation)
     // JSON serialization library, works with the Kotlin serialization plugin
     implementation(libs.kotlinx.serialization.json)
+
+    implementation(libs.accompanist.navigation.material)
+    implementation(libs.accompanist.pager)
+    implementation(libs.accompanist.pager.indicators)
 }
