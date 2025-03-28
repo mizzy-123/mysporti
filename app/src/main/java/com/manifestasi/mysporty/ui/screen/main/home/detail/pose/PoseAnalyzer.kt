@@ -1,4 +1,4 @@
-package com.manifestasi.mysporty.ui.component
+package com.manifestasi.mysporty.ui.screen.main.home.detail.pose
 
 import android.content.Context
 import android.graphics.Bitmap

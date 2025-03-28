@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.manifestasi.mysporty.ui.component.button.ButtonLogin
+import com.manifestasi.mysporty.ui.component.divider.DividerAuth
 import com.manifestasi.mysporty.ui.component.field.InputEmailField
 import com.manifestasi.mysporty.ui.component.field.InputPasswordField
 import com.manifestasi.mysporty.ui.theme.MySportyTheme
@@ -104,7 +105,11 @@ fun LoginScreen(
                 }
             )
 
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.height(29.dp))
+
+            DividerAuth()
+
+            Spacer(Modifier.height(29.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),

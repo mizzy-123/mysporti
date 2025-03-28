@@ -22,7 +22,8 @@ import kotlinx.serialization.Serializable
 
 @Composable
 fun MainScreen(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    rootNavController: NavHostController = rememberNavController()
 ){
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -41,7 +42,9 @@ fun MainScreen(
 
         NavHost(navController, startDestination = HomeRoute, Modifier.padding(padding)){
             composable<HomeRoute> {
-                HomeScreen()
+                HomeScreen(
+                    rootNavController = rootNavController
+                )
             }
 
             composable<ProfileRoute> {

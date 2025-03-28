@@ -43,7 +43,9 @@ fun MySportyApp(
         }
 
         composable<Main> {
-            MainScreen()
+            MainScreen(
+                rootNavController = navController
+            )
         }
 
         composable<Detail> {
@@ -62,4 +64,6 @@ object Register
 object Main
 
 @Serializable
-object Detail
+data class Detail(
+    val repetition: Int
+)

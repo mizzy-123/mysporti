@@ -14,6 +14,8 @@ val TextFieldColor = Color(0xFFF7F8F8)
 val TextColor = Color(0xFFADA4A5)
 val TextColor2 = Color(0xFFC58BF2)
 val TextColor3 = Color(0xFFEEA4CE)
+val TextColor4 = Color(0xFFADA4A5)
+val TextColor5 = Color(0xFF1D1617)
 
 val ButtonColor1 = Color(0xFF92A3FD)
 val ButtonColor2 = Color(0xFF9DCEFF)
@@ -24,6 +26,6 @@ val BlueColor2 = Color(0xFF9DCEFF)
 val Purple1 = Color(0xFFC58BF2)
 val Purple2 = Color(0xFFEEA4CE)
 
-val TextColor4 = Color(0xFFADA4A5)
 
 val GrayColor1 = Color(0xFF7B6F72)
+val GrayColor2 = Color(0xFFDDDADA)

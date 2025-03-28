@@ -30,11 +30,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.manifestasi.mysporty.ui.component.button.ButtonRegister
+import com.manifestasi.mysporty.ui.component.divider.DividerAuth
 import com.manifestasi.mysporty.ui.component.field.InputEmailField
 import com.manifestasi.mysporty.ui.component.field.InputNameField
 import com.manifestasi.mysporty.ui.component.field.InputPasswordField
-import com.manifestasi.mysporty.ui.theme.ButtonColor1
-import com.manifestasi.mysporty.ui.theme.ButtonColor2
 import com.manifestasi.mysporty.ui.theme.MySportyTheme
 import com.manifestasi.mysporty.ui.theme.TextColor2
 import com.manifestasi.mysporty.ui.theme.TextColor3
@@ -128,7 +127,11 @@ fun RegisterScreen(
 
             })
 
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.height(29.dp))
+
+            DividerAuth()
+
+            Spacer(Modifier.height(29.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),

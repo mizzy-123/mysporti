@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 import com.manifestasi.mysporty.ui.component.CameraPreview
 import com.manifestasi.mysporty.ui.component.DrawPoseLandmarks
-import com.manifestasi.mysporty.ui.component.PoseAnalyzer
+import com.manifestasi.mysporty.ui.screen.main.home.detail.pose.PoseAnalyzer
 import com.manifestasi.mysporty.ui.component.PoseResult
 import com.manifestasi.mysporty.ui.theme.MySportyTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,55 +37,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    RealTimePoseDetection()
+                    MySportyApp()
                 }
             }
         }
-    }
-}
-
-@Composable
-fun RealTimePoseDetection() {
-    val context = LocalContext.current
-    var landmarks by remember { mutableStateOf<List<NormalizedLandmark>>(emptyList()) }
-    val poseAnalyzer = remember { PoseAnalyzer(context) { detectedLandmarks ->
-        landmarks = detectedLandmarks
-    } }
-
-    var predictedClass by remember { mutableStateOf(-1) }
-
-    DisposableEffect(Unit) {
-        onDispose {
-            poseAnalyzer.release() // Release resource saat Composable dihancurkan
-            poseAnalyzer.excersiseClassifyClose()
-        }
-    }
-
-    Box(modifier = Modifier.fillMaxSize()) {
-        CameraPreview(onFrame = { imageProxy ->
-            poseAnalyzer.analyze(imageProxy)
-            poseAnalyzer.excersiseClassify(landmarks) { predicted ->
-                predictedClass = predicted
-            }
-        })
-
-        DrawPoseLandmarks(landmarks = landmarks, modifier = Modifier.fillMaxSize())
-        PoseResult(predictedClass)
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MySportyTheme {
-        Greeting("Android")
     }
 }

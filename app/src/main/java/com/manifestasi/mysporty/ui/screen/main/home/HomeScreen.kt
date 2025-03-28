@@ -2,6 +2,7 @@ package com.manifestasi.mysporty.ui.screen.main.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,6 +35,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.manifestasi.mysporty.Detail
 import com.manifestasi.mysporty.R
 import com.manifestasi.mysporty.data.model.DataExercise
 import com.manifestasi.mysporty.ui.component.card.CardBMI
@@ -42,7 +46,9 @@ import com.manifestasi.mysporty.ui.theme.poppins
 import com.manifestasi.mysporty.util.Excersise
 
 @Composable
-fun HomeScreen(){
+fun HomeScreen(
+    rootNavController: NavHostController = rememberNavController()
+){
     Surface(modifier = Modifier.fillMaxSize().background(Color.White)) {
         Column(
             modifier = Modifier
@@ -98,7 +104,11 @@ fun HomeScreen(){
                     index
                 }){ index, item ->
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth().clickable {
+                            rootNavController.navigate(Detail(
+                                repetition = item.default_repetisi
+                            ))
+                        },
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
