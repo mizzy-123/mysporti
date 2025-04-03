@@ -3,6 +3,7 @@ package com.manifestasi.mysporty.ui.screen.login
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -49,12 +50,14 @@ fun LoginScreen(
     var password by rememberSaveable { mutableStateOf("") }
     var visiblePassword by rememberSaveable { mutableStateOf(false) }
 
-    Surface(modifier = Modifier.fillMaxSize().background(Color.White)) {
+    Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 30.dp),
+            modifier = Modifier.fillMaxWidth()
+                .align(Alignment.Center)
+                .padding(horizontal = 30.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(Modifier.height(40.dp))
+//            Spacer(Modifier.height(40.dp))
 
             Text(
                 "Hey There,",

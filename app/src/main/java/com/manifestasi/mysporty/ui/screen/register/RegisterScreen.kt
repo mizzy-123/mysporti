@@ -52,13 +52,15 @@ fun RegisterScreen(
     var password by rememberSaveable { mutableStateOf("") }
     var visiblePassword by rememberSaveable { mutableStateOf(false) }
 
-    Surface(modifier = Modifier.fillMaxSize().background(Color.White)) {
+    Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 30.dp),
+            modifier = Modifier.fillMaxWidth()
+                .align(Alignment.Center)
+                .padding(horizontal = 30.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Spacer(Modifier.height(40.dp))
+//            Spacer(Modifier.height(40.dp))
 
             Text(
                 "Hey There,",
