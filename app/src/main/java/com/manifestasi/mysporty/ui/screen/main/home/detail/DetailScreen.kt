@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -57,10 +58,13 @@ import com.manifestasi.mysporty.ui.theme.poppins
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import kotlinx.coroutines.launch
+import kotlin.math.abs
 
 @OptIn(ExperimentalSnapperApi::class)
 @Composable
-fun DetailScreen(){
+fun DetailScreen(
+    onNavigateToPose: () -> Unit
+){
     val list = (1..10).toList() // Data yang akan ditampilkan (misal angka repetisi)
     var selectedIndex by remember { mutableStateOf(0) }
     val listState = rememberLazyListState(initialFirstVisibleItemIndex = selectedIndex)
@@ -69,11 +73,16 @@ fun DetailScreen(){
     // Scroll otomatis ke item tengah setelah berhenti scrolling
     LaunchedEffect(listState.isScrollInProgress) {
         if (!listState.isScrollInProgress) {
-            val selectedItem = listState.firstVisibleItemIndex + 1
+//            val selectedItem = listState.firstVisibleItemIndex + 1
+            
+            val centerItemIndex = listState.layoutInfo.visibleItemsInfo
+                .minByOrNull { abs(it.offset) }?.index ?: selectedIndex
+
+            selectedIndex = centerItemIndex
             coroutineScope.launch {
-                listState.animateScrollToItem(selectedItem)
+                listState.animateScrollToItem(selectedIndex)
             }
-            selectedIndex = selectedItem
+//            selectedIndex = selectedItem
         }
     }
 
@@ -299,10 +308,12 @@ fun DetailScreen(){
                 state = listState,
                 modifier = Modifier.height(120.dp), // Tinggi area scroll
                 flingBehavior = rememberSnapperFlingBehavior(listState), // Auto snap ke item
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
+                contentPadding = PaddingValues(bottom = 80.dp)
             ) {
                 items(list.size) { index ->
-                    val isSelected = (index == listState.firstVisibleItemIndex + 1) // Item tengah
+//                    val isSelected = (index == listState.firstVisibleItemIndex + 1) // Item tengah
+                    val isSelected = index == selectedIndex
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -332,8 +343,12 @@ fun DetailScreen(){
         Spacer(Modifier.height(30.dp))
 
         ButtonStart(
-            onClick = {}
+            onClick = {
+                onNavigateToPose()
+            }
         )
+
+        Spacer(Modifier.height(100.dp))
     }
 }
 
@@ -342,6 +357,8 @@ fun DetailScreen(){
 @Preview(showBackground = true)
 fun DetailScreenPreview(){
     MySportyTheme {
-        DetailScreen()
+        DetailScreen(
+            onNavigateToPose = {}
+        )
     }
 }

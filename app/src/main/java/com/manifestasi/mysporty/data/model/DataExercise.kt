@@ -1,7 +1,9 @@
 package com.manifestasi.mysporty.data.model
 
 data class DataExercise(
+    val id: String,
     val name: String,
+    val start: String,
     val description: String,
     val link_youtube: String,
     val image: Int,

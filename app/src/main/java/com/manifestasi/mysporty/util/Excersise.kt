@@ -6,25 +6,31 @@ import com.manifestasi.mysporty.data.model.DataExercise
 object Excersise {
     val getData: List<DataExercise> = listOf(
         DataExercise(
+            id = "jumping_jack",
             name = "Jumping Jack",
+            start = "jumping_jack_start",
             description = "Jumping jack test",
-            link_youtube = "httpasdf",
+            link_youtube = "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/mECzqUIDWfU?si=FUS_OmoLct7pHQUl\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
             image = R.drawable.jumping_jack,
             default_repetisi = 12,
             tutorialList = emptyList()
         ),
         DataExercise(
+            id = "squat",
             name = "Squat",
+            start = "squat_up",
             description = "sasdfdasf",
-            link_youtube = "asdfasdf",
+            link_youtube = "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/mECzqUIDWfU?si=FUS_OmoLct7pHQUl\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
             image = R.drawable.squat,
             default_repetisi = 20,
             tutorialList = emptyList()
         ),
         DataExercise(
+            id = "pushup",
             name = "Pushup",
+            start = "pushup_up",
             description = "sasdfdasf",
-            link_youtube = "asdfasdf",
+            link_youtube = "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/mECzqUIDWfU?si=FUS_OmoLct7pHQUl\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
             image = R.drawable.pushup,
             default_repetisi = 16,
             tutorialList = emptyList()

@@ -1,6 +1,7 @@
 package com.manifestasi.mysporty.util
 
-val label = listOf("pushup_up",
+val label = listOf(
+    "pushup_up",
     "pushup_down",
     "plank",
     "squat_up",

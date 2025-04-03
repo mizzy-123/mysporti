@@ -49,7 +49,7 @@ fun CameraPreview(onFrame: (ImageProxy) -> Unit) {
     if (cameraPermissionState.status.isGranted) {
         AndroidView(factory = { AndroidViewContext ->
             val previewView = PreviewView(AndroidViewContext)
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+            val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
 
             cameraProviderFuture.addListener({
                 val cameraProvider = cameraProviderFuture.get()
