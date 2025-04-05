@@ -1,9 +1,12 @@
 package com.manifestasi.mysporty.ui.component
 
+import android.speech.tts.TextToSpeech
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
@@ -21,12 +25,31 @@ import com.manifestasi.mysporty.Pose
 import com.manifestasi.mysporty.ui.theme.MySportyTheme
 import com.manifestasi.mysporty.util.label
 import kotlinx.coroutines.delay
+import java.util.Locale
 
 @Composable
 fun PoseResult(
     dataPose: Pose,
     result: Int
 ){
+
+    val context = LocalContext.current
+
+    var ttsInitializeStatus by remember { mutableStateOf(false) }
+
+    // Init TTS
+    val tts = remember {
+        TextToSpeech(context, TextToSpeech.OnInitListener { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                Toast.makeText(context, "TTS Initialize success", Toast.LENGTH_SHORT).show()
+                ttsInitializeStatus = true
+            }
+        })
+    }
+
+    LaunchedEffect(tts) {
+        tts.language = Locale("id", "ID")
+    }
 
     var repetitionCount by rememberSaveable { mutableStateOf(0) }
     val prediction: String = if (result != -1) label[result] else result.toString()
@@ -37,6 +60,24 @@ fun PoseResult(
     var currentState by rememberSaveable { mutableStateOf("") }
 
     var messageInstruction by rememberSaveable { mutableStateOf("Ambil posisi") }
+
+    // Track pesan yang terakhir dibaca agar tidak diulang
+    var lastSpokenMessage by rememberSaveable { mutableStateOf("") }
+
+    // Trigger TTS hanya jika messageInstruction berubah dan beda dari sebelumnya
+    LaunchedEffect(ttsInitializeStatus, messageInstruction) {
+        if ((messageInstruction.isNotEmpty() && messageInstruction != lastSpokenMessage) && ttsInitializeStatus) {
+            lastSpokenMessage = messageInstruction
+            delay(300) // debounce singkat
+            tts.speak(messageInstruction, TextToSpeech.QUEUE_FLUSH, null, null)
+        }
+    }
+
+    LaunchedEffect(repetitionCount) {
+        if (ttsInitializeStatus){
+            tts.speak(repetitionCount.toString(), TextToSpeech.QUEUE_FLUSH, null, null)
+        }
+    }
 
     LaunchedEffect(prediction, timeLeft) {
         if (prediction == dataPose.start && timeLeft > 0){
@@ -122,6 +163,13 @@ fun PoseResult(
             )
         }
 
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            tts.stop()
+            tts.shutdown()
+        }
     }
 }
 
