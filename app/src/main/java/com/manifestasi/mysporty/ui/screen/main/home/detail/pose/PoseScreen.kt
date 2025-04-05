@@ -12,13 +12,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
+import com.manifestasi.mysporty.Pose
 import com.manifestasi.mysporty.ui.component.CameraPreview
 import com.manifestasi.mysporty.ui.component.DrawPoseLandmarks
 import com.manifestasi.mysporty.ui.component.PoseResult
 import com.manifestasi.mysporty.ui.theme.MySportyTheme
 
 @Composable
-fun PoseScreen(){
+fun PoseScreen(
+    dataPose: Pose
+){
     val context = LocalContext.current
     var landmarks by remember { mutableStateOf<List<NormalizedLandmark>>(emptyList()) }
     val poseAnalyzer = remember { PoseAnalyzer(context) { detectedLandmarks ->
@@ -43,7 +46,10 @@ fun PoseScreen(){
         })
 
         DrawPoseLandmarks(landmarks = landmarks, modifier = Modifier.fillMaxSize())
-        PoseResult(predictedClass)
+        PoseResult(
+            dataPose = dataPose,
+            result = predictedClass
+        )
     }
 }
 
@@ -51,6 +57,15 @@ fun PoseScreen(){
 @Preview(showBackground = true)
 fun PoseScreenPreview(){
     MySportyTheme {
-        PoseScreen()
+        PoseScreen(
+            dataPose = Pose(
+                id = "",
+                repetition = 9,
+                link = "",
+                start = "",
+                start_state = "",
+                name = ""
+            )
+        )
     }
 }

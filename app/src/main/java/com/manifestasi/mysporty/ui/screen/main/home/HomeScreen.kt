@@ -107,7 +107,9 @@ fun HomeScreen(
                         modifier = Modifier.fillMaxWidth().clickable {
                             rootNavController.navigate(Detail(
                                 id = item.id,
+                                name = item.name,
                                 start = item.start,
+                                start_state = item.start_state,
                                 link = item.link_youtube,
                                 repetition = item.default_repetisi
                             ))

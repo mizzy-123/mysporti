@@ -30,10 +30,10 @@ fun EmbedYoutubeView(url: String){
                 settings.javaScriptEnabled = true
                 webViewClient = WebViewClient()
                 webChromeClient = WebChromeClient()
-                loadUrl(url)
+                loadData(url, "text/html", "utf-8")
             }
         },
-        update = { it.loadUrl(url) }
+        update = { it.loadData(url, "text/html", "utf-8") }
     )
 }
 

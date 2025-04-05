@@ -1,6 +1,11 @@
 package com.manifestasi.mysporty
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -52,13 +57,20 @@ fun MySportyApp(
 
         composable<Detail> { backStackEntry ->
             val detail = backStackEntry.toRoute<Detail>()
+            var repetitionFix by rememberSaveable { mutableIntStateOf(detail.repetition) }
             DetailScreen(
+                dataDetail = detail,
+                onSelectedRepetition = {
+                    repetitionFix = it
+                },
                 onNavigateToPose = {
                     navController.navigate(Pose(
                         id = detail.id,
+                        name = detail.name,
                         start = detail.start,
+                        start_state = detail.start_state,
                         link = detail.link,
-                        repetition = 8
+                        repetition = repetitionFix
                     ))
                 }
             )
@@ -66,7 +78,9 @@ fun MySportyApp(
 
         composable<Pose> { backStackEntry ->
             val pose = backStackEntry.toRoute<Pose>()
-            PoseScreen()
+            PoseScreen(
+                dataPose = pose
+            )
         }
     }
 }
@@ -83,7 +97,9 @@ object Main
 @Serializable
 data class Detail(
     val id: String,
+    val name: String,
     val start: String,
+    val start_state: String,
     val link: String,
     val repetition: Int
 )
@@ -91,7 +107,9 @@ data class Detail(
 @Serializable
 data class Pose(
     val id: String,
+    val name: String,
     val start: String,
+    val start_state: String,
     val link: String,
     val repetition: Int
 )

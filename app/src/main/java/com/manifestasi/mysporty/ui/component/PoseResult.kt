@@ -17,12 +17,16 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
+import com.manifestasi.mysporty.Pose
 import com.manifestasi.mysporty.ui.theme.MySportyTheme
 import com.manifestasi.mysporty.util.label
 import kotlinx.coroutines.delay
 
 @Composable
-fun PoseResult(result: Int){
+fun PoseResult(
+    dataPose: Pose,
+    result: Int
+){
 
     var repetitionCount by rememberSaveable { mutableStateOf(0) }
     val prediction: String = if (result != -1) label[result] else result.toString()
@@ -35,7 +39,7 @@ fun PoseResult(result: Int){
     var messageInstruction by rememberSaveable { mutableStateOf("Ambil posisi") }
 
     LaunchedEffect(prediction, timeLeft) {
-        if (prediction == "pushup_up" && timeLeft > 0){
+        if (prediction == dataPose.start && timeLeft > 0){
             messageInstruction = "Bagus pertahankan"
             delay(1000L)
             timeLeft--
@@ -44,21 +48,47 @@ fun PoseResult(result: Int){
         }
 
         if (timeLeft == 0) {
-            currentState = "up"
+            currentState = dataPose.start_state
             isStart = true
         }
     }
 
     LaunchedEffect(prediction) {
         if (isStart) {
-            if (prediction == "pushup_down" && currentState == "up") {
-                delay(500) // Tambahkan delay untuk memastikan deteksi stabil
-                currentState = "down"
-                repetitionCount++
-            } else if (prediction == "pushup_up" && currentState == "down") {
-                delay(500) // Tambahkan delay agar transisi tidak terlalu cepat
-                currentState = "up"
+            when(dataPose.id) {
+                "pushup" -> {
+                    if (prediction == "pushup_down" && currentState == "up") {
+                        delay(500) // Tambahkan delay untuk memastikan deteksi stabil
+                        currentState = "down"
+                        repetitionCount++
+                    } else if (prediction == "pushup_up" && currentState == "down") {
+                        delay(500) // Tambahkan delay agar transisi tidak terlalu cepat
+                        currentState = "up"
+                    }
+                }
+                "squat" -> {
+                    if (prediction == "squat_down" && currentState == "up") {
+                        delay(500) // Tambahkan delay untuk memastikan deteksi stabil
+                        currentState = "down"
+                        repetitionCount++
+                    } else if (prediction == "squat_up" && currentState == "down") {
+                        delay(500) // Tambahkan delay agar transisi tidak terlalu cepat
+                        currentState = "up"
+                    }
+                }
+                "jumping_jack" -> {
+                    if (prediction == "jumping_jack_end" && currentState == "start") {
+                        delay(500) // Tambahkan delay untuk memastikan deteksi stabil
+                        currentState = "end"
+                        repetitionCount++
+                    } else if (prediction == "jumping_jack_start" && currentState == "down") {
+                        delay(500) // Tambahkan delay agar transisi tidak terlalu cepat
+                        currentState = "start"
+                    }
+                }
+                else -> {}
             }
+
         }
     }
 
@@ -100,6 +130,14 @@ fun PoseResult(result: Int){
 fun PoseResultPreview(){
     MySportyTheme {
         PoseResult(
+            dataPose = Pose(
+                id = "",
+                repetition = 9,
+                link = "",
+                start = "",
+                start_state = "",
+                name = ""
+            ),
             result = 0
         )
     }

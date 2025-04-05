@@ -4,6 +4,7 @@ data class DataExercise(
     val id: String,
     val name: String,
     val start: String,
+    val start_state: String,
     val description: String,
     val link_youtube: String,
     val image: Int,

@@ -30,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -48,8 +49,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.manifestasi.mysporty.Detail
 import com.manifestasi.mysporty.R
 import com.manifestasi.mysporty.ui.component.button.ButtonStart
+import com.manifestasi.mysporty.ui.component.webview.EmbedYoutubeView
 import com.manifestasi.mysporty.ui.theme.GrayColor1
 import com.manifestasi.mysporty.ui.theme.MySportyTheme
 import com.manifestasi.mysporty.ui.theme.Purple1
@@ -63,10 +66,13 @@ import kotlin.math.abs
 @OptIn(ExperimentalSnapperApi::class)
 @Composable
 fun DetailScreen(
+    dataDetail: Detail,
+    onSelectedRepetition: (Int) -> Unit,
     onNavigateToPose: () -> Unit
 ){
-    val list = (1..10).toList() // Data yang akan ditampilkan (misal angka repetisi)
-    var selectedIndex by remember { mutableStateOf(0) }
+    val dataRepetition = dataDetail.repetition
+    val list = (1..dataRepetition).toList() // Data yang akan ditampilkan (misal angka repetisi)
+    var selectedIndex by remember { mutableIntStateOf(dataRepetition) }
     val listState = rememberLazyListState(initialFirstVisibleItemIndex = selectedIndex)
     val coroutineScope = rememberCoroutineScope()
 
@@ -74,11 +80,12 @@ fun DetailScreen(
     LaunchedEffect(listState.isScrollInProgress) {
         if (!listState.isScrollInProgress) {
 //            val selectedItem = listState.firstVisibleItemIndex + 1
-            
+
             val centerItemIndex = listState.layoutInfo.visibleItemsInfo
                 .minByOrNull { abs(it.offset) }?.index ?: selectedIndex
 
             selectedIndex = centerItemIndex
+            onSelectedRepetition(selectedIndex)
             coroutineScope.launch {
                 listState.animateScrollToItem(selectedIndex)
             }
@@ -107,15 +114,17 @@ fun DetailScreen(
 
         Spacer(Modifier.height(30.dp))
 
-        Box(
-            modifier = Modifier.fillMaxWidth().height(150.dp).clip(RoundedCornerShape(22.dp))
-                .background(Color.Red)
-        )
+//        Box(
+//            modifier = Modifier.fillMaxWidth().height(150.dp).clip(RoundedCornerShape(22.dp))
+//                .background(Color.Red)
+//        )
+
+        EmbedYoutubeView(dataDetail.link)
 
         Spacer(Modifier.height(20.dp))
 
         Text(
-            text = "Jumping Jack",
+            text = dataDetail.name,
             style = TextStyle(
                 fontFamily = poppins,
                 fontSize = 16.sp,
@@ -358,6 +367,15 @@ fun DetailScreen(
 fun DetailScreenPreview(){
     MySportyTheme {
         DetailScreen(
+            dataDetail = Detail(
+                id = "",
+                name = "",
+                start = "",
+                start_state = "",
+                link = "",
+                repetition = 4
+            ),
+            onSelectedRepetition = {},
             onNavigateToPose = {}
         )
     }
