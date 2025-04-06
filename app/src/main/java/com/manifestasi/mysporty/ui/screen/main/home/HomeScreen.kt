@@ -53,6 +53,7 @@ fun HomeScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(Color.White)
                 .padding(
                     start = 30.dp,
                     end = 30.dp,

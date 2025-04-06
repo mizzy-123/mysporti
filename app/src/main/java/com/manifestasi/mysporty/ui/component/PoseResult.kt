@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 import com.manifestasi.mysporty.Pose
+import com.manifestasi.mysporty.ui.component.dialog.CompleteDialog
 import com.manifestasi.mysporty.ui.theme.MySportyTheme
 import com.manifestasi.mysporty.util.label
 import kotlinx.coroutines.delay
@@ -64,11 +65,15 @@ fun PoseResult(
     // Track pesan yang terakhir dibaca agar tidak diulang
     var lastSpokenMessage by rememberSaveable { mutableStateOf("") }
 
+    var isComplete by rememberSaveable { mutableStateOf(false) }
+
     // Trigger TTS hanya jika messageInstruction berubah dan beda dari sebelumnya
     LaunchedEffect(ttsInitializeStatus, messageInstruction) {
         if ((messageInstruction.isNotEmpty() && messageInstruction != lastSpokenMessage) && ttsInitializeStatus) {
             lastSpokenMessage = messageInstruction
             delay(300) // debounce singkat
+            tts.speak(messageInstruction, TextToSpeech.QUEUE_FLUSH, null, null)
+        } else if (repetitionCount == dataPose.repetition){
             tts.speak(messageInstruction, TextToSpeech.QUEUE_FLUSH, null, null)
         }
     }
@@ -76,6 +81,11 @@ fun PoseResult(
     LaunchedEffect(repetitionCount) {
         if (ttsInitializeStatus){
             tts.speak(repetitionCount.toString(), TextToSpeech.QUEUE_FLUSH, null, null)
+        }
+
+        if (repetitionCount == dataPose.repetition){
+            isComplete = true
+            tts.speak("Selamat", TextToSpeech.QUEUE_FLUSH, null, null)
         }
     }
 
@@ -131,6 +141,17 @@ fun PoseResult(
             }
 
         }
+    }
+
+    if (isComplete){
+        CompleteDialog(
+            title = "Selamat",
+            description = "Selamat Anda berhasil menyelesaikan latihan ini",
+            buttonOnclick = {
+                isComplete = false
+            },
+            onDismiss = {}
+        )
     }
 
     Box(modifier = Modifier.fillMaxSize()){
