@@ -111,8 +111,10 @@ fun HomeScreen(
                                 name = item.name,
                                 start = item.start,
                                 start_state = item.start_state,
+                                description = item.description,
                                 link = item.link_youtube,
-                                repetition = item.default_repetisi
+                                repetition = item.default_repetisi,
+                                tutorialList = item.tutorialList
                             ))
                         },
                         verticalAlignment = Alignment.CenterVertically,

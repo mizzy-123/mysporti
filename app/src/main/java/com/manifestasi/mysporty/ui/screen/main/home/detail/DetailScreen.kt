@@ -157,7 +157,7 @@ fun DetailScreen(
         Spacer(Modifier.height(15.dp))
 
         Text(
-            text = "asdfsadfsadf",
+            text = dataDetail.description,
             style = TextStyle(
                 fontFamily = poppins,
                 fontSize = 12.sp,
@@ -181,7 +181,7 @@ fun DetailScreen(
                 )
             )
             Text(
-                text = "4 Steps",
+                text = "${dataDetail.tutorialList.size} Steps",
                 style = TextStyle(
                     fontFamily = poppins,
                     fontSize = 12.sp,
@@ -194,115 +194,124 @@ fun DetailScreen(
         Spacer(Modifier.height(14.dp))
 
         Column {
-            Row (verticalAlignment = Alignment.Top) {
+            dataDetail.tutorialList.forEachIndexed { index, tutorial ->
+                val num = (index+1).toString().padStart(2, '0')
 
-                Text(
-                    text = "01",
-                    style = TextStyle(
-                        fontFamily = poppins,
-                        fontSize = 14.sp,
-                        brush = Brush.linearGradient(
-                            colors = listOf(
-                                Purple1,
-                                Purple2
-                            ),
-                            start = Offset(x = 14f, y = 17f),
-                            end = Offset(x = -4.72101f, y = 16.0342f)
+                if (dataDetail.tutorialList.size-1 != index){
+                    Row (verticalAlignment = Alignment.Top) {
+
+                        Text(
+                            text = num,
+                            style = TextStyle(
+                                fontFamily = poppins,
+                                fontSize = 14.sp,
+                                brush = Brush.linearGradient(
+                                    colors = listOf(
+                                        Purple1,
+                                        Purple2
+                                    ),
+                                    start = Offset(x = 14f, y = 17f),
+                                    end = Offset(x = -4.72101f, y = 16.0342f)
+                                )
+                            )
                         )
-                    )
-                )
 
-                Spacer(Modifier.width(13.dp))
+                        Spacer(Modifier.width(13.dp))
 
-                Column (
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.circle_1),
-                        contentDescription = "circle"
-                    )
-                    Canvas(modifier = Modifier.height(100.dp).width(2.dp)) {
-                        drawLine(
-                            color = Purple1,
-                            start = Offset(size.width / 2, 0f),  // Mulai dari atas
-                            end = Offset(size.width / 2, size.height), // Sampai ke bawah
-                            strokeWidth = 4f,
-                            pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f) // 10px garis, 10px kosong
+                        Column (
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.circle_1),
+                                contentDescription = "circle"
+                            )
+                            Canvas(modifier = Modifier.height(100.dp).width(2.dp)) {
+                                drawLine(
+                                    color = Purple1,
+                                    start = Offset(size.width / 2, 0f),  // Mulai dari atas
+                                    end = Offset(size.width / 2, size.height), // Sampai ke bawah
+                                    strokeWidth = 4f,
+                                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f) // 10px garis, 10px kosong
+                                )
+                            }
+                        }
+
+                        Spacer(Modifier.width(15.dp))
+
+                        Column {
+                            Text(
+                                text = tutorial.name,
+                                style = TextStyle(
+                                    fontFamily = poppins,
+                                    fontSize = 14.sp
+                                )
+                            )
+                            Spacer(Modifier.height(5.dp))
+                            Text(
+                                text = tutorial.name,
+                                style = TextStyle(
+                                    fontFamily = poppins,
+                                    fontSize = 12.sp,
+                                    color = GrayColor1
+                                )
+                            )
+                        }
+                    }
+                } else {
+                    Row (verticalAlignment = Alignment.Top) {
+
+                        Text(
+                            text = num,
+                            style = TextStyle(
+                                fontFamily = poppins,
+                                fontSize = 14.sp,
+                                brush = Brush.linearGradient(
+                                    colors = listOf(
+                                        Purple1,
+                                        Purple2
+                                    ),
+                                    start = Offset(x = 14f, y = 17f),
+                                    end = Offset(x = -4.72101f, y = 16.0342f)
+                                )
+                            )
                         )
+
+                        Spacer(Modifier.width(13.dp))
+
+                        Column (
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.circle_1),
+                                contentDescription = "circle"
+                            )
+                        }
+
+                        Spacer(Modifier.width(15.dp))
+
+                        Column {
+                            Text(
+                                text = tutorial.name,
+                                style = TextStyle(
+                                    fontFamily = poppins,
+                                    fontSize = 14.sp
+                                )
+                            )
+                            Spacer(Modifier.height(5.dp))
+                            Text(
+                                text = tutorial.description,
+                                style = TextStyle(
+                                    fontFamily = poppins,
+                                    fontSize = 12.sp,
+                                    color = GrayColor1
+                                )
+                            )
+                        }
                     }
                 }
 
-                Spacer(Modifier.width(15.dp))
-
-                Column {
-                    Text(
-                        text = "Spread Your Arms",
-                        style = TextStyle(
-                            fontFamily = poppins,
-                            fontSize = 14.sp
-                        )
-                    )
-                    Spacer(Modifier.height(5.dp))
-                    Text(
-                        text = "To make the gestures feel more relaxed, stretch your arms as you start this movement. No bending of hands.",
-                        style = TextStyle(
-                            fontFamily = poppins,
-                            fontSize = 12.sp,
-                            color = GrayColor1
-                        )
-                    )
-                }
             }
-            Row (verticalAlignment = Alignment.Top) {
 
-                Text(
-                    text = "01",
-                    style = TextStyle(
-                        fontFamily = poppins,
-                        fontSize = 14.sp,
-                        brush = Brush.linearGradient(
-                            colors = listOf(
-                                Purple1,
-                                Purple2
-                            ),
-                            start = Offset(x = 14f, y = 17f),
-                            end = Offset(x = -4.72101f, y = 16.0342f)
-                        )
-                    )
-                )
-
-                Spacer(Modifier.width(13.dp))
-
-                Column (
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.circle_1),
-                        contentDescription = "circle"
-                    )
-                }
-
-                Spacer(Modifier.width(15.dp))
-
-                Column {
-                    Text(
-                        text = "Spread Your Arms",
-                        style = TextStyle(
-                            fontFamily = poppins,
-                            fontSize = 14.sp
-                        )
-                    )
-                    Spacer(Modifier.height(5.dp))
-                    Text(
-                        text = "To make the gestures feel more relaxed, stretch your arms as you start this movement. No bending of hands.",
-                        style = TextStyle(
-                            fontFamily = poppins,
-                            fontSize = 12.sp,
-                            color = GrayColor1
-                        )
-                    )
-                }
-            }
             Spacer(Modifier.height(30.dp))
             Text(
                 text = "Custom Repetitions",
@@ -372,8 +381,10 @@ fun DetailScreenPreview(){
                 name = "",
                 start = "",
                 start_state = "",
+                description = "",
                 link = "",
-                repetition = 4
+                repetition = 4,
+                tutorialList = emptyList()
             ),
             onSelectedRepetition = {},
             onNavigateToPose = {}

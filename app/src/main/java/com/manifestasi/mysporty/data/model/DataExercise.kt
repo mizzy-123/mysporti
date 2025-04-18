@@ -1,5 +1,7 @@
 package com.manifestasi.mysporty.data.model
 
+import kotlinx.serialization.Serializable
+
 data class DataExercise(
     val id: String,
     val name: String,
@@ -12,6 +14,7 @@ data class DataExercise(
     val tutorialList: List<Tutorial>
 )
 
+@Serializable
 data class Tutorial(
     val name: String,
     val description: String

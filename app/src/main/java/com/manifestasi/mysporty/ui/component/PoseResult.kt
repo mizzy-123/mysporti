@@ -205,7 +205,8 @@ fun PoseResultPreview(){
                 link = "",
                 start = "",
                 start_state = "",
-                name = ""
+                name = "",
+                tutorialList = emptyList()
             ),
             result = 0
         )

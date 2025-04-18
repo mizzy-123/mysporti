@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.manifestasi.mysporty.data.model.Tutorial
 import com.manifestasi.mysporty.ui.screen.login.LoginScreen
 import com.manifestasi.mysporty.ui.screen.main.MainScreen
 import com.manifestasi.mysporty.ui.screen.main.home.detail.DetailScreen
@@ -70,7 +71,8 @@ fun MySportyApp(
                         start = detail.start,
                         start_state = detail.start_state,
                         link = detail.link,
-                        repetition = repetitionFix
+                        repetition = repetitionFix,
+                        tutorialList = detail.tutorialList
                     ))
                 }
             )
@@ -100,8 +102,10 @@ data class Detail(
     val name: String,
     val start: String,
     val start_state: String,
+    val description: String,
     val link: String,
-    val repetition: Int
+    val repetition: Int,
+    val tutorialList: List<Tutorial>
 )
 
 @Serializable
@@ -111,5 +115,6 @@ data class Pose(
     val start: String,
     val start_state: String,
     val link: String,
-    val repetition: Int
+    val repetition: Int,
+    val tutorialList: List<Tutorial>
 )

@@ -7,6 +7,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -16,6 +17,7 @@ import com.manifestasi.mysporty.Pose
 import com.manifestasi.mysporty.ui.component.CameraPreview
 import com.manifestasi.mysporty.ui.component.DrawPoseLandmarks
 import com.manifestasi.mysporty.ui.component.PoseResult
+import com.manifestasi.mysporty.ui.component.dialog.StartDialog
 import com.manifestasi.mysporty.ui.theme.MySportyTheme
 
 @Composable
@@ -24,6 +26,8 @@ fun PoseScreen(
 ){
     val context = LocalContext.current
     var landmarks by remember { mutableStateOf<List<NormalizedLandmark>>(emptyList()) }
+    var startDialog by rememberSaveable { mutableStateOf(true) }
+
     val poseAnalyzer = remember { PoseAnalyzer(context) { detectedLandmarks ->
         landmarks = detectedLandmarks
     } }
@@ -37,19 +41,32 @@ fun PoseScreen(
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        CameraPreview(onFrame = { imageProxy ->
-            poseAnalyzer.analyze(imageProxy)
-            poseAnalyzer.excersiseClassify(landmarks) { predicted ->
-                predictedClass = predicted
+    if (startDialog){
+        StartDialog(
+            title = "Sebelum memulai",
+            description = dataPose.tutorialList[0].description,
+            onDismiss = {},
+            buttonOnclick = {
+                startDialog = false
             }
-        })
-
-        DrawPoseLandmarks(landmarks = landmarks, modifier = Modifier.fillMaxSize())
-        PoseResult(
-            dataPose = dataPose,
-            result = predictedClass
         )
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        if (!startDialog){
+            CameraPreview(onFrame = { imageProxy ->
+                poseAnalyzer.analyze(imageProxy)
+                poseAnalyzer.excersiseClassify(landmarks) { predicted ->
+                    predictedClass = predicted
+                }
+            })
+
+            DrawPoseLandmarks(landmarks = landmarks, modifier = Modifier.fillMaxSize())
+            PoseResult(
+                dataPose = dataPose,
+                result = predictedClass
+            )
+        }
     }
 }
 
@@ -64,7 +81,8 @@ fun PoseScreenPreview(){
                 link = "",
                 start = "",
                 start_state = "",
-                name = ""
+                name = "",
+                tutorialList = emptyList()
             )
         )
     }
