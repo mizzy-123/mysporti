@@ -71,8 +71,7 @@ fun MySportyApp(
                         start = detail.start,
                         start_state = detail.start_state,
                         link = detail.link,
-                        repetition = repetitionFix,
-                        tutorialList = detail.tutorialList
+                        repetition = repetitionFix
                     ))
                 }
             )
@@ -104,8 +103,7 @@ data class Detail(
     val start_state: String,
     val description: String,
     val link: String,
-    val repetition: Int,
-    val tutorialList: List<Tutorial>
+    val repetition: Int
 )
 
 @Serializable
@@ -115,6 +113,5 @@ data class Pose(
     val start: String,
     val start_state: String,
     val link: String,
-    val repetition: Int,
-    val tutorialList: List<Tutorial>
+    val repetition: Int
 )

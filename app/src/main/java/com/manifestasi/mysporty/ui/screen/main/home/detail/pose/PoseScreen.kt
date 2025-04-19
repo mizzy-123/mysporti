@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -14,11 +15,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 import com.manifestasi.mysporty.Pose
+import com.manifestasi.mysporty.data.model.DataExercise
 import com.manifestasi.mysporty.ui.component.CameraPreview
 import com.manifestasi.mysporty.ui.component.DrawPoseLandmarks
 import com.manifestasi.mysporty.ui.component.PoseResult
 import com.manifestasi.mysporty.ui.component.dialog.StartDialog
 import com.manifestasi.mysporty.ui.theme.MySportyTheme
+import com.manifestasi.mysporty.util.Excersise
 
 @Composable
 fun PoseScreen(
@@ -27,6 +30,17 @@ fun PoseScreen(
     val context = LocalContext.current
     var landmarks by remember { mutableStateOf<List<NormalizedLandmark>>(emptyList()) }
     var startDialog by rememberSaveable { mutableStateOf(true) }
+
+    val tutorial = remember {
+        val exercise = Excersise.getData.find { it.id == dataPose.id }
+        if (exercise != null) {
+            mutableStateListOf<DataExercise>(exercise)
+        } else {
+            mutableStateListOf<DataExercise>()
+        }
+    }
+
+    val getTutorial = tutorial[0]
 
     val poseAnalyzer = remember { PoseAnalyzer(context) { detectedLandmarks ->
         landmarks = detectedLandmarks
@@ -44,7 +58,7 @@ fun PoseScreen(
     if (startDialog){
         StartDialog(
             title = "Sebelum memulai",
-            description = dataPose.tutorialList[0].description,
+            description = getTutorial.tutorialList[0].description,
             onDismiss = {},
             buttonOnclick = {
                 startDialog = false
@@ -81,8 +95,7 @@ fun PoseScreenPreview(){
                 link = "",
                 start = "",
                 start_state = "",
-                name = "",
-                tutorialList = emptyList()
+                name = ""
             )
         )
     }

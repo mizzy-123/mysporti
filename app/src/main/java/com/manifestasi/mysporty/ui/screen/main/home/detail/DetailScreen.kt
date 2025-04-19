@@ -31,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -51,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.manifestasi.mysporty.Detail
 import com.manifestasi.mysporty.R
+import com.manifestasi.mysporty.data.model.DataExercise
 import com.manifestasi.mysporty.ui.component.button.ButtonStart
 import com.manifestasi.mysporty.ui.component.webview.EmbedYoutubeView
 import com.manifestasi.mysporty.ui.theme.GrayColor1
@@ -58,6 +60,7 @@ import com.manifestasi.mysporty.ui.theme.MySportyTheme
 import com.manifestasi.mysporty.ui.theme.Purple1
 import com.manifestasi.mysporty.ui.theme.Purple2
 import com.manifestasi.mysporty.ui.theme.poppins
+import com.manifestasi.mysporty.util.Excersise
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import kotlinx.coroutines.launch
@@ -75,6 +78,17 @@ fun DetailScreen(
     var selectedIndex by remember { mutableIntStateOf(dataRepetition) }
     val listState = rememberLazyListState(initialFirstVisibleItemIndex = selectedIndex)
     val coroutineScope = rememberCoroutineScope()
+
+    val tutorial = remember {
+        val exercise = Excersise.getData.find { it.id == dataDetail.id }
+        if (exercise != null) {
+            mutableStateListOf<DataExercise>(exercise)
+        } else {
+            mutableStateListOf<DataExercise>()
+        }
+    }
+
+    val getTutorial = tutorial[0]
 
     // Scroll otomatis ke item tengah setelah berhenti scrolling
     LaunchedEffect(listState.isScrollInProgress) {
@@ -181,7 +195,7 @@ fun DetailScreen(
                 )
             )
             Text(
-                text = "${dataDetail.tutorialList.size} Steps",
+                text = "${getTutorial.tutorialList.size} Steps",
                 style = TextStyle(
                     fontFamily = poppins,
                     fontSize = 12.sp,
@@ -194,10 +208,10 @@ fun DetailScreen(
         Spacer(Modifier.height(14.dp))
 
         Column {
-            dataDetail.tutorialList.forEachIndexed { index, tutorial ->
+            getTutorial.tutorialList.forEachIndexed { index, tutorial ->
                 val num = (index+1).toString().padStart(2, '0')
 
-                if (dataDetail.tutorialList.size-1 != index){
+                if (getTutorial.tutorialList.size-1 != index){
                     Row (verticalAlignment = Alignment.Top) {
 
                         Text(
@@ -248,7 +262,7 @@ fun DetailScreen(
                             )
                             Spacer(Modifier.height(5.dp))
                             Text(
-                                text = tutorial.name,
+                                text = tutorial.description,
                                 style = TextStyle(
                                     fontFamily = poppins,
                                     fontSize = 12.sp,
@@ -383,8 +397,7 @@ fun DetailScreenPreview(){
                 start_state = "",
                 description = "",
                 link = "",
-                repetition = 4,
-                tutorialList = emptyList()
+                repetition = 4
             ),
             onSelectedRepetition = {},
             onNavigateToPose = {}
