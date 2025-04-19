@@ -140,6 +140,16 @@ fun PoseResult(
                         currentState = "start"
                     }
                 }
+                "ab_crunch" -> {
+                    if (prediction == "ab_crunch_up" && currentState == "down") {
+                        delay(500) // Tambahkan delay untuk memastikan deteksi stabil
+                        currentState = "up"
+                        repetitionCount++
+                    } else if (prediction == "ab_crunch_down" && currentState == "up") {
+                        delay(500) // Tambahkan delay agar transisi tidak terlalu cepat
+                        currentState = "down"
+                    }
+                }
                 else -> {}
             }
 
