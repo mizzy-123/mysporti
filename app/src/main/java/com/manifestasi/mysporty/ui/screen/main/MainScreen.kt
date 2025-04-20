@@ -48,7 +48,9 @@ fun MainScreen(
             }
 
             composable<ProfileRoute> {
-                ProfileScreen()
+                ProfileScreen(
+                    rootNavController = rootNavController
+                )
             }
         }
     }

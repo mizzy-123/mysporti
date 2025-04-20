@@ -26,6 +26,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.manifestasi.mysporty.History
 import com.manifestasi.mysporty.R
 import com.manifestasi.mysporty.ui.component.button.ButtonEdit
 import com.manifestasi.mysporty.ui.component.card.CardInformation
@@ -35,7 +38,9 @@ import com.manifestasi.mysporty.ui.theme.MySportyTheme
 import com.manifestasi.mysporty.ui.theme.poppins
 
 @Composable
-fun ProfileScreen(){
+fun ProfileScreen(
+    rootNavController: NavHostController = rememberNavController()
+){
     Surface(modifier = Modifier.fillMaxSize().background(Color.White)) {
         Column(
             modifier = Modifier.fillMaxSize()
@@ -137,7 +142,9 @@ fun ProfileScreen(){
                     MenuProfile(
                         iconImage = R.drawable.ic_activity,
                         text = "Acitivity History",
-                        onClick = {}
+                        onClick = {
+                            rootNavController.navigate(History)
+                        }
                     )
 
                     Spacer(Modifier.height(15.dp))

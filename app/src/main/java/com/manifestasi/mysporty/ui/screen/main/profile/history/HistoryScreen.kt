@@ -39,7 +39,9 @@ import com.manifestasi.mysporty.ui.theme.MySportyTheme
 import com.manifestasi.mysporty.ui.theme.poppins
 
 @Composable
-fun HistoryScreen(){
+fun HistoryScreen(
+    onNavigateBack: () -> Unit
+){
     val context = LocalContext.current
     val dummyData = listOf(
         HistoryExcersise(
@@ -70,7 +72,9 @@ fun HistoryScreen(){
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(
-                onClick = {}
+                onClick = {
+                    onNavigateBack()
+                }
             ) {
                 Image(
                     painter = painterResource(R.drawable.back_navs),
@@ -166,6 +170,8 @@ fun HistoryScreen(){
 @Preview(showBackground = true)
 fun HistoryScreenPreview(){
     MySportyTheme {
-        HistoryScreen()
+        HistoryScreen(
+            onNavigateBack = {}
+        )
     }
 }

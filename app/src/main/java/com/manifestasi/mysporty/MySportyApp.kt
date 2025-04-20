@@ -16,6 +16,7 @@ import com.manifestasi.mysporty.ui.screen.login.LoginScreen
 import com.manifestasi.mysporty.ui.screen.main.MainScreen
 import com.manifestasi.mysporty.ui.screen.main.home.detail.DetailScreen
 import com.manifestasi.mysporty.ui.screen.main.home.detail.pose.PoseScreen
+import com.manifestasi.mysporty.ui.screen.main.profile.history.HistoryScreen
 import com.manifestasi.mysporty.ui.screen.register.RegisterScreen
 import kotlinx.serialization.Serializable
 
@@ -83,6 +84,14 @@ fun MySportyApp(
                 dataPose = pose
             )
         }
+
+        composable<History> {
+            HistoryScreen(
+                onNavigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
     }
 }
 
@@ -94,6 +103,9 @@ object Register
 
 @Serializable
 object Main
+
+@Serializable
+object History
 
 @Serializable
 data class Detail(
