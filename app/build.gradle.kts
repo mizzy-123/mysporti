@@ -1,3 +1,6 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -23,6 +26,10 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val properties = gradleLocalProperties(rootDir, providers)
+        buildConfigField("String", "SUPABASE_URL", "\"${properties.get("SUPABASE_URL")}\"")
+        buildConfigField("String", "SUPABASE_ANON_KEY", "\"${properties.get("SUPABASE_ANON_KEY")}\"")
     }
 
     buildTypes {
@@ -44,6 +51,7 @@ android {
     buildFeatures {
         compose = true
         mlModelBinding = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -105,4 +113,8 @@ dependencies {
     implementation(libs.accompanist.navigation.material)
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pager.indicators)
+
+    implementation(platform(libs.bom))
+    implementation(libs.postgrest.kt)
+    implementation(libs.ktor.client.android)
 }

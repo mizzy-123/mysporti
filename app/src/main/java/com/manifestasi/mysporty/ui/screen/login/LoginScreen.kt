@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -29,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.manifestasi.mysporty.ui.component.button.ButtonLogin
 import com.manifestasi.mysporty.ui.component.divider.DividerAuth
 import com.manifestasi.mysporty.ui.component.field.InputEmailField
@@ -43,12 +46,23 @@ import kotlin.math.sin
 @Composable
 fun LoginScreen(
     onNavigateToRegister: () -> Unit,
-    onNavigateToMain: () -> Unit
+    onNavigateToMain: () -> Unit,
+    viewModel: LoginViewModel = hiltViewModel()
 ){
 
-    var email by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
+    val email = viewModel.email.collectAsState(initial = "")
+    val password = viewModel.password.collectAsState()
+    val isLoading = viewModel.loadingLogin.collectAsState()
     var visiblePassword by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        viewModel.loginSuccess.collect { result ->
+            if (result){
+                onNavigateToMain()
+                viewModel.resetLoginSuccess()
+            }
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
         Column(
@@ -79,20 +93,20 @@ fun LoginScreen(
             Spacer(Modifier.height(30.dp))
 
             InputEmailField(
-                text = email,
+                text = email.value,
                 placeholder = "Email",
                 onChange = {
-                    email = it
+                    viewModel.onEmailChange(it)
                 }
             )
 
             Spacer(Modifier.height(15.dp))
 
             InputPasswordField(
-                text = password,
+                text = password.value,
                 placeholder = "Password",
                 onChange = {
-                    password = it
+                    viewModel.onPasswordChange(it)
                 },
                 isPasswordVisible = visiblePassword,
                 onVisibilityChange = {
@@ -104,8 +118,10 @@ fun LoginScreen(
 
             ButtonLogin(
                 onClick = {
-                    onNavigateToMain()
-                }
+                    viewModel.login()
+                },
+                isDisabled = isLoading.value,
+                isLoading = isLoading.value
             )
 
             Spacer(Modifier.height(29.dp))

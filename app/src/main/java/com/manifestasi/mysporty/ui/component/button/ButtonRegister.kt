@@ -6,10 +6,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonElevation
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,6 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.manifestasi.mysporty.ui.theme.ButtonColor1
 import com.manifestasi.mysporty.ui.theme.ButtonColor2
+import com.manifestasi.mysporty.ui.theme.GrayColor1
+import com.manifestasi.mysporty.ui.theme.GrayColor2
 import com.manifestasi.mysporty.ui.theme.MySportyTheme
 import com.manifestasi.mysporty.ui.theme.poppins
 import kotlin.math.cos
@@ -34,7 +38,9 @@ import kotlin.math.sin
 @Composable
 fun ButtonRegister(
     onClick: () -> Unit,
-    height: Dp = 60.dp
+    height: Dp = 60.dp,
+    isDisabled: Boolean = false,
+    isLoading: Boolean = false
 ){
     val widthGradient = 300f  // Lebar area gradasi
     val heightGradient = 300f // Tinggi area gradasi
@@ -47,16 +53,24 @@ fun ButtonRegister(
             containerColor = Color.Transparent
         ),
         contentPadding = PaddingValues(),
-        elevation = ButtonDefaults.buttonElevation(10.dp)
+        elevation = ButtonDefaults.buttonElevation(10.dp),
+        enabled = !isDisabled
     ) {
         Box(
             modifier = Modifier.fillMaxSize()
                 .background(
                     brush = Brush.linearGradient(
-                        colors = listOf(
-                            ButtonColor1,
-                            ButtonColor2
-                        ),
+                        colors = if (isDisabled){
+                            listOf(
+                                GrayColor1,
+                                GrayColor2
+                            )
+                        } else {
+                            listOf(
+                                ButtonColor1,
+                                ButtonColor2
+                            )
+                        },
                         start = Offset(0f, 0f), // Mulai dari kiri atas
                         end = Offset(
                             x = widthGradient * cos(Math.toRadians(120.0)).toFloat(),  // Hitung x berdasarkan sudut
@@ -65,15 +79,25 @@ fun ButtonRegister(
                     ),
                 )
         ) {
-            Text(
-                modifier = Modifier.align(Alignment.Center),
-                text = "Register",
-                style = TextStyle(
-                    fontFamily = poppins,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
+            if(isLoading){
+                CircularProgressIndicator(
+                    color = Color.White,
+                    strokeWidth = 4.dp,
+                    modifier = Modifier
+                        .size(30.dp)
+                        .align(Alignment.Center)
                 )
-            )
+            } else {
+                Text(
+                    modifier = Modifier.align(Alignment.Center),
+                    text = "Register",
+                    style = TextStyle(
+                        fontFamily = poppins,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                )
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.manifestasi.mysporty.ui.screen.register
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +16,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -24,11 +27,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.manifestasi.mysporty.ui.component.button.ButtonRegister
 import com.manifestasi.mysporty.ui.component.divider.DividerAuth
 import com.manifestasi.mysporty.ui.component.field.InputEmailField
@@ -43,14 +48,31 @@ import kotlin.math.sin
 
 @Composable
 fun RegisterScreen(
-    onNavigateToLogin: () -> Unit
+    onNavigateToLogin: () -> Unit,
+    viewModel: RegisterViewModel = hiltViewModel()
 ){
-
-    var firstName by rememberSaveable { mutableStateOf("") }
-    var lastName by rememberSaveable { mutableStateOf("") }
-    var email by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
+    val context = LocalContext.current
     var visiblePassword by rememberSaveable { mutableStateOf(false) }
+
+    val firstName = viewModel.firstName.collectAsState(initial = "")
+    val lastName = viewModel.lastName.collectAsState(initial = "")
+    val email = viewModel.email.collectAsState(initial = "")
+    val password = viewModel.password.collectAsState()
+
+    val loadingRegister = viewModel.loadingRegister.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.toastMessage.collect { message ->
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        }
+
+        viewModel.registerSuccess.collect { result ->
+            if (result){
+                onNavigateToLogin()
+                viewModel.resetRegisterSuccess()
+            }
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
         Column(
@@ -82,40 +104,40 @@ fun RegisterScreen(
             Spacer(Modifier.height(30.dp))
 
             InputNameField(
-                text = firstName,
+                text = firstName.value,
                 placeholder = "First Name",
                 onChange = {
-                    firstName = it
+                    viewModel.onFirstNameChange(it)
                 }
             )
 
             Spacer(Modifier.height(15.dp))
 
             InputNameField(
-                text = lastName,
+                text = lastName.value,
                 placeholder = "Last Name",
                 onChange = {
-                    lastName = it
+                    viewModel.onLastNameChange(it)
                 }
             )
 
             Spacer(Modifier.height(15.dp))
 
             InputEmailField(
-                text = email,
+                text = email.value,
                 placeholder = "Email",
                 onChange = {
-                    email = it
+                    viewModel.onEmailChange(it)
                 }
             )
 
             Spacer(Modifier.height(15.dp))
 
             InputPasswordField(
-                text = password,
+                text = password.value,
                 placeholder = "Password",
                 onChange = {
-                    password = it
+                    viewModel.onPasswordChange(it)
                 },
                 isPasswordVisible = visiblePassword,
                 onVisibilityChange = {
@@ -126,8 +148,11 @@ fun RegisterScreen(
             Spacer(Modifier.height(100.dp))
 
             ButtonRegister(onClick = {
-
-            })
+                viewModel.register()
+            },
+                isLoading = loadingRegister.value,
+                isDisabled = loadingRegister.value
+            )
 
             Spacer(Modifier.height(29.dp))
 

@@ -1,17 +1,21 @@
 package com.manifestasi.mysporty
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.manifestasi.mysporty.data.Resource
 import com.manifestasi.mysporty.data.model.Tutorial
+import com.manifestasi.mysporty.ui.screen.IsLoginViewModel
 import com.manifestasi.mysporty.ui.screen.login.LoginScreen
 import com.manifestasi.mysporty.ui.screen.main.MainScreen
 import com.manifestasi.mysporty.ui.screen.main.home.detail.DetailScreen
@@ -22,8 +26,27 @@ import kotlinx.serialization.Serializable
 
 @Composable
 fun MySportyApp(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    isLoginViewModel: IsLoginViewModel = hiltViewModel()
 ){
+
+    LaunchedEffect(Unit) {
+        isLoginViewModel.isLoggedIn().collect { event ->
+            when (event){
+                is Resource.Success -> {
+                    if (event.data){
+                        navController.navigate(Main){
+                            popUpTo(0) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                        }
+                    }
+                } else -> {}
+            }
+        }
+    }
+
     NavHost(
         navController = navController,
         startDestination = Login
