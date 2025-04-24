@@ -43,12 +43,13 @@ import com.manifestasi.mysporty.ui.theme.MySportyTheme
 import com.manifestasi.mysporty.ui.theme.TextColor2
 import com.manifestasi.mysporty.ui.theme.TextColor3
 import com.manifestasi.mysporty.ui.theme.poppins
+import kotlinx.coroutines.launch
 import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
 fun RegisterScreen(
-    onNavigateToLogin: () -> Unit,
+    onNavigateToMain: () -> Unit,
     viewModel: RegisterViewModel = hiltViewModel()
 ){
     val context = LocalContext.current
@@ -62,14 +63,17 @@ fun RegisterScreen(
     val loadingRegister = viewModel.loadingRegister.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.toastMessage.collect { message ->
-            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        launch {
+            viewModel.toastMessage.collect { message ->
+                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+            }
         }
-
-        viewModel.registerSuccess.collect { result ->
-            if (result){
-                onNavigateToLogin()
-                viewModel.resetRegisterSuccess()
+        launch {
+            viewModel.registerSuccess.collect { result ->
+                if (result) {
+                    onNavigateToMain()
+                    viewModel.resetRegisterSuccess()
+                }
             }
         }
     }
@@ -174,7 +178,7 @@ fun RegisterScreen(
                 Spacer(Modifier.width(8.dp))
                 Text(
                     modifier = Modifier.clickable {
-                        onNavigateToLogin()
+                        onNavigateToMain()
                     },
                     text = "Login",
                     style = TextStyle(
@@ -207,7 +211,7 @@ fun RegisterScreen(
 fun RegisterScreenPreview(){
     MySportyTheme {
         RegisterScreen(
-            onNavigateToLogin = {}
+            onNavigateToMain = {}
         )
     }
 }

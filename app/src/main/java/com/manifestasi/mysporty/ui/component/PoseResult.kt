@@ -86,7 +86,7 @@ fun PoseResult(
             tts.speak(repetitionCount.toString(), TextToSpeech.QUEUE_FLUSH, null, null)
         }
 
-        if (repetitionCount == dataPose.repetition){
+        if (repetitionCount == dataPose.repetition+1){
             isComplete = true
             tts.speak("Selamat", TextToSpeech.QUEUE_FLUSH, null, null)
         }

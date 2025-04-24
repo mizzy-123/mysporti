@@ -57,6 +57,7 @@ class LoginViewModel @Inject constructor(
                     }
                     is Resource.Error -> {
                         _loadingLogin.value = false
+                        _toastMessage.send(event.errorMessage)
                     }
                     else -> {}
                 }

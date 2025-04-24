@@ -74,6 +74,7 @@ class RegisterViewModel @Inject constructor(
                         _registerSuccess.value = true
                     }
                     is Resource.Error -> {
+                        _loadingRegister.value = false
                         _toastMessage.send(event.errorMessage)
                     }
                     else -> {}

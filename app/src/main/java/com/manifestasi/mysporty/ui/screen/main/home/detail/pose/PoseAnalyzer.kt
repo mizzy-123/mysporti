@@ -67,10 +67,10 @@ class PoseAnalyzer(
             // Langsung panggil detectAsync tanpa perlu memeriksa error manual
 //            poseLandmarker.detectAsync(mpImage, SystemClock.uptimeMillis())
 
-            frameCounter++
-            if (frameCounter % 3 != 0) { // Analisis hanya setiap 3 frame
-                return
-            }
+//            frameCounter++
+//            if (frameCounter % 3 != 0) { // Analisis hanya setiap 3 frame
+//                return
+//            }
 
             val mediaImage = imageProxy.image ?: return
             val rotationDegrees = imageProxy.imageInfo.rotationDegrees // Dapatkan derajat rotasi gambar

@@ -68,8 +68,13 @@ fun MySportyApp(
         }
         composable<Register> {
             RegisterScreen(
-                onNavigateToLogin = {
-                    navController.navigate(Login)
+                onNavigateToMain = {
+                    navController.navigate(Main){
+                        popUpTo(0) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
                 }
             )
         }

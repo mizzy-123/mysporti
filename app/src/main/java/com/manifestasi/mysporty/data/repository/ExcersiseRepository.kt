@@ -4,6 +4,7 @@ import android.util.Log
 import com.manifestasi.mysporty.data.Resource
 import com.manifestasi.mysporty.data.model.DataExercise
 import com.manifestasi.mysporty.data.model.Profile
+import com.manifestasi.mysporty.util.Validation
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.postgrest.Postgrest
@@ -42,10 +43,24 @@ class ExcersiseRepository @Inject constructor(
         emit(Resource.Loading)
         try {
 
-            val user = auth.signUpWith(Email){
+            val errorMessage = when {
+                firstName.isEmpty() -> "Firstname tidak boleh kosong"
+                lastName.isEmpty() -> "Lastname tidak boleh kosong"
+                email.isEmpty() -> "Email tidak boleh kosong"
+                password.isEmpty() -> "Password tidak boleh kosong"
+                else -> null
+            }
+
+            if (errorMessage != null) {
+                emit(Resource.Error(errorMessage))
+                return@flow
+            }
+
+            auth.signUpWith(Email){
                 this.email = email
                 this.password = password
             }
+            val user = auth.currentUserOrNull()
 
             val userId = user?.id
             requireNotNull(userId) { "User ID is null after sign up" }
@@ -59,7 +74,7 @@ class ExcersiseRepository @Inject constructor(
             emit(Resource.Success(true))
         } catch (e: Exception){
             Log.e("ExcersiseRepository.register", e.message.toString())
-            emit(Resource.Error(e.message.toString()))
+            emit(Resource.Error("Something Wrong"))
         }
     }.flowOn(Dispatchers.IO)
 
@@ -69,6 +84,18 @@ class ExcersiseRepository @Inject constructor(
     ): Flow<Resource<Boolean>> = flow {
         emit(Resource.Loading)
         try {
+            val errorMessage = when {
+                email.isEmpty() -> "Email tidak boleh kosong"
+                password.isEmpty() -> "Password tidak boleh kosong"
+                !Validation.isValidEmail(email) -> "Email tidak valid"
+                else -> null
+            }
+
+            if (errorMessage != null) {
+                emit(Resource.Error(errorMessage))
+                return@flow
+            }
+
             auth.signInWith(Email){
                 this.email = email
                 this.password = password
@@ -77,7 +104,7 @@ class ExcersiseRepository @Inject constructor(
             emit(Resource.Success(true))
         } catch (e: Exception){
             Log.e("ExcersiseRepository.login", e.message.toString())
-            emit(Resource.Error(e.message.toString()))
+            emit(Resource.Error("Something Wrong"))
         }
     }.flowOn(Dispatchers.IO)
 

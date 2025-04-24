@@ -1,5 +1,6 @@
 package com.manifestasi.mysporty.ui.screen.login
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,6 +52,8 @@ fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel()
 ){
 
+    val context = LocalContext.current
+
     val email = viewModel.email.collectAsState(initial = "")
     val password = viewModel.password.collectAsState()
     val isLoading = viewModel.loadingLogin.collectAsState()
@@ -61,6 +65,12 @@ fun LoginScreen(
                 onNavigateToMain()
                 viewModel.resetLoginSuccess()
             }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.toastMessage.collect { message ->
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
         }
     }
 
