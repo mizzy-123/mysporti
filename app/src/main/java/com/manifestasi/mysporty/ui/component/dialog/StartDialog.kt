@@ -1,5 +1,6 @@
 package com.manifestasi.mysporty.ui.component.dialog
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -28,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.manifestasi.mysporty.R
 import com.manifestasi.mysporty.ui.theme.ButtonColor1
 import com.manifestasi.mysporty.ui.theme.ButtonColor2
 import com.manifestasi.mysporty.ui.theme.MySportyTheme
@@ -36,6 +39,7 @@ import com.manifestasi.mysporty.ui.theme.poppins
 @Composable
 fun StartDialog(
     title: String,
+    image: Int,
     description: String,
     onDismiss: () -> Unit,
     buttonOnclick: () -> Unit
@@ -56,12 +60,12 @@ fun StartDialog(
             ){
                 Spacer(Modifier.height(37.dp))
 
-//                Image(
-//                    painter = painterResource(R.drawable.icon_x),
-//                    contentDescription = "icon x"
-//                )
+                Image(
+                    painter = painterResource(image),
+                    contentDescription = "icon x"
+                )
 
-//                Spacer(Modifier.height(18.dp))
+                Spacer(Modifier.height(18.dp))
 
                 Text(
                     text = title,
@@ -139,6 +143,7 @@ fun StartDialogPreview(){
     MySportyTheme {
         StartDialog(
             title = "Sebelum dimulai",
+            image = R.drawable.pushup_start,
             description = "Sebelum memulai posisikan depan",
             onDismiss = {},
             buttonOnclick = {}

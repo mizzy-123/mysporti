@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 import com.manifestasi.mysporty.Pose
+import com.manifestasi.mysporty.R
 import com.manifestasi.mysporty.data.model.DataExercise
 import com.manifestasi.mysporty.ui.component.CameraPreview
 import com.manifestasi.mysporty.ui.component.DrawPoseLandmarks
@@ -58,6 +59,7 @@ fun PoseScreen(
     if (startDialog){
         StartDialog(
             title = "Sebelum memulai",
+            image = dataPose.start_position_image,
             description = getTutorial.tutorialList[0].description,
             onDismiss = {},
             buttonOnclick = {
@@ -95,7 +97,8 @@ fun PoseScreenPreview(){
                 link = "",
                 start = "",
                 start_state = "",
-                name = ""
+                name = "",
+                start_position_image = R.drawable.pushup_start
             )
         )
     }

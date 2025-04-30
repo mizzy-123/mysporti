@@ -110,6 +110,7 @@ fun HomeScreen(
                                 id = item.id,
                                 name = item.name,
                                 start = item.start,
+                                start_position_image = item.start_position_image,
                                 start_state = item.start_state,
                                 description = item.description,
                                 link = item.link_youtube,

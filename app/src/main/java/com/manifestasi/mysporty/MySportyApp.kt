@@ -22,35 +22,40 @@ import com.manifestasi.mysporty.ui.screen.main.home.detail.DetailScreen
 import com.manifestasi.mysporty.ui.screen.main.home.detail.pose.PoseScreen
 import com.manifestasi.mysporty.ui.screen.main.profile.history.HistoryScreen
 import com.manifestasi.mysporty.ui.screen.register.RegisterScreen
+import com.manifestasi.mysporty.ui.screen.splash.SplashScreen
 import kotlinx.serialization.Serializable
 
 @Composable
 fun MySportyApp(
-    navController: NavHostController = rememberNavController(),
-    isLoginViewModel: IsLoginViewModel = hiltViewModel()
+    navController: NavHostController = rememberNavController()
 ){
-
-    LaunchedEffect(Unit) {
-        isLoginViewModel.isLoggedIn().collect { event ->
-            when (event){
-                is Resource.Success -> {
-                    if (event.data){
-                        navController.navigate(Main){
-                            popUpTo(0) {
-                                inclusive = true
-                            }
-                            launchSingleTop = true
-                        }
-                    }
-                } else -> {}
-            }
-        }
-    }
 
     NavHost(
         navController = navController,
-        startDestination = Login
+        startDestination = Splash
     ) {
+
+        composable<Splash> {
+            SplashScreen(
+                onNavigateToMain = {
+                    navController.navigate(Main){
+                        popUpTo(0) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                },
+                onNavigateToLogin = {
+                    navController.navigate(Login){
+                        popUpTo(0) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
+
         composable<Login> {
             LoginScreen(
                 onNavigateToRegister = {
@@ -98,6 +103,7 @@ fun MySportyApp(
                         id = detail.id,
                         name = detail.name,
                         start = detail.start,
+                        start_position_image = detail.start_position_image,
                         start_state = detail.start_state,
                         link = detail.link,
                         repetition = repetitionFix
@@ -124,6 +130,9 @@ fun MySportyApp(
 }
 
 @Serializable
+object Splash
+
+@Serializable
 object Login
 
 @Serializable
@@ -141,6 +150,7 @@ data class Detail(
     val name: String,
     val start: String,
     val start_state: String,
+    val start_position_image: Int,
     val description: String,
     val link: String,
     val repetition: Int
@@ -151,6 +161,7 @@ data class Pose(
     val id: String,
     val name: String,
     val start: String,
+    val start_position_image: Int,
     val start_state: String,
     val link: String,
     val repetition: Int

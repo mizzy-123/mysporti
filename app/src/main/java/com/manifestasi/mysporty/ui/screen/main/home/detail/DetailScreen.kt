@@ -395,6 +395,7 @@ fun DetailScreenPreview(){
                 name = "",
                 start = "",
                 start_state = "",
+                start_position_image = R.drawable.pushup_start,
                 description = "",
                 link = "",
                 repetition = 4

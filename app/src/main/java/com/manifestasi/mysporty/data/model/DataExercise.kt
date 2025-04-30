@@ -10,6 +10,7 @@ data class DataExercise(
     val description: String,
     val link_youtube: String,
     val image: Int,
+    val start_position_image: Int,
     val default_repetisi: Int,
     val tutorialList: List<Tutorial>
 )

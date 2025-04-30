@@ -217,6 +217,7 @@ fun PoseResultPreview(){
                 repetition = 9,
                 link = "",
                 start = "",
+                start_position_image = 0,
                 start_state = "",
                 name = ""
             ),

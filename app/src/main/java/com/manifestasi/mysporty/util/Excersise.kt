@@ -14,6 +14,7 @@ object Excersise {
             description = "Jumping jack test",
             link_youtube = "<iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/CWpmIW6l-YA?si=URYW_jO7DKJDQnKv\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
             image = R.drawable.jumping_jack,
+            start_position_image = R.drawable.jumping_jack_start,
             default_repetisi = 12,
             tutorialList = listOf(
                 Tutorial(
@@ -42,6 +43,7 @@ object Excersise {
             description = "sasdfdasf",
             link_youtube = "<iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/YaXPRqUwItQ?si=FeLXr1BDksJbO1pS\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
             image = R.drawable.squat,
+            start_position_image = R.drawable.squat_start,
             default_repetisi = 20,
             tutorialList = listOf(
                 Tutorial(
@@ -74,6 +76,7 @@ object Excersise {
             description = "sasdfdasf",
             link_youtube = "<iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/mECzqUIDWfU?si=FUS_OmoLct7pHQUl\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
             image = R.drawable.pushup,
+            start_position_image = R.drawable.pushup_start,
             default_repetisi = 16,
             tutorialList = listOf(
                 Tutorial(
@@ -106,6 +109,7 @@ object Excersise {
             description = "asdfasdf",
             link_youtube = "",
             image = R.drawable.ab_crunch,
+            start_position_image = R.drawable.ab_crunch_start,
             default_repetisi = 16,
             tutorialList = listOf(
                 Tutorial(
