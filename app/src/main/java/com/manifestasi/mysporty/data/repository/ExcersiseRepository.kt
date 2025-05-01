@@ -20,6 +20,18 @@ class ExcersiseRepository @Inject constructor(
     private val database: Postgrest
 ) {
 
+    fun logout(): Flow<Resource<Boolean>> = flow {
+        emit(Resource.Loading)
+        try {
+            auth.signOut()
+
+            emit(Resource.Success(true))
+        } catch (e: Exception){
+            Log.e("ExcersiseRepository.logout", e.message.toString())
+            emit(Resource.Error(e.message.toString()))
+        }
+    }
+
     fun isLoggedIn(): Flow<Resource<Boolean>> = flow {
         emit(Resource.Loading)
         try {
