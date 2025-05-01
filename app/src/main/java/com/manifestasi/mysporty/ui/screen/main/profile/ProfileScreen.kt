@@ -87,9 +87,9 @@ fun ProfileScreen(
                         )
                     )
                 }
-                ButtonEdit(
-                    onClick = {}
-                )
+//                ButtonEdit(
+//                    onClick = {}
+//                )
             }
 
             Spacer(Modifier.height(23.dp))

@@ -22,6 +22,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -44,9 +45,26 @@ import com.manifestasi.mysporty.ui.theme.Purple2
 import com.manifestasi.mysporty.ui.theme.poppins
 
 @Composable
-fun CardBMI(){
+fun CardBMI(
+    height: Float,
+    weight: Float
+){
+    val result = rememberSaveable {
+        val bmi = weight / (height * height)
+        bmi
+    }
 
-    val animatedProgress by animateFloatAsState(targetValue = 25f, label = "progress_animation")
+    val resultBmi = rememberSaveable {
+        val resultBmi = when {
+            result < 18.5 -> "unnder weight"
+            result in 18.5..24.9 -> "normal weight"
+            result in 25.0..29.9 -> "over weight"
+            else -> "Obesity"
+        }
+        resultBmi
+    }
+
+    val animatedProgress by animateFloatAsState(targetValue = result, label = "progress_animation")
 
 //    val offsetXTextCircleChart = if (animatedProgress <= 20)
 
@@ -161,7 +179,7 @@ fun CardBMI(){
                 )
                 Spacer(Modifier.height(5.dp))
                 Text(
-                    text = "You have a normal weight",
+                    text = "You have a $resultBmi",
                     style = TextStyle(
                         fontFamily = poppins,
                         fontSize = 12.sp,
@@ -234,6 +252,9 @@ fun CardBMI(){
 )
 fun CardBMIPreview(){
     MySportyTheme {
-        CardBMI()
+        CardBMI(
+            height = 169f,
+            weight = 68f
+        )
     }
 }

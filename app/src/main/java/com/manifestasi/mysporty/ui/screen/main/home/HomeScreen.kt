@@ -82,7 +82,10 @@ fun HomeScreen(
 
             Spacer(Modifier.height(30.dp))
             
-            CardBMI()
+            CardBMI(
+                height = 169f,
+                weight = 68f
+            )
 
             Spacer(Modifier.height(30.dp))
 
