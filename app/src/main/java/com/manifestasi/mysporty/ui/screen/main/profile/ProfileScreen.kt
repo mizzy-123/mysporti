@@ -40,6 +40,7 @@ import androidx.navigation.compose.rememberNavController
 import com.manifestasi.mysporty.History
 import com.manifestasi.mysporty.PersonalData
 import com.manifestasi.mysporty.R
+import com.manifestasi.mysporty.data.model.Profile
 import com.manifestasi.mysporty.ui.component.button.ButtonEdit
 import com.manifestasi.mysporty.ui.component.card.CardInformation
 import com.manifestasi.mysporty.ui.component.dialog.QuestionDialog
@@ -51,17 +52,23 @@ import com.manifestasi.mysporty.util.finishAffinity
 
 @Composable
 fun ProfileScreen(
+    isLoading: Boolean = false,
+    profile: Profile? = null,
     rootNavController: NavHostController = rememberNavController(),
     viewModel: ProfileViewModel = hiltViewModel()
 ){
+    val height = profile?.height ?: 0
+    val weight = profile?.weight ?: 0
+    val age = profile?.age ?: 0
+
     val context = LocalContext.current
     var logoutDialog by rememberSaveable { mutableStateOf(false) }
 
     if (logoutDialog){
         QuestionDialog(
             onDismiss = {},
-            title = "",
-            description = "",
+            title = "Ingin Keluar?",
+            description = "Apakah anda yakin ingin keluar?",
             btnClickNo = {
                 logoutDialog = false
             },
@@ -73,7 +80,9 @@ fun ProfileScreen(
 
     LaunchedEffect(Unit) {
         viewModel.loadingLogout.collect { event ->
-            Toast.makeText(context, "Loading...", Toast.LENGTH_LONG).show()
+            if (event){
+                Toast.makeText(context, "Loading...", Toast.LENGTH_LONG).show()
+            }
         }
     }
 
@@ -114,7 +123,7 @@ fun ProfileScreen(
             ) {
                 Column {
                     Text(
-                        "Stefani Wong",
+                        if (isLoading) "Loading..." else "${profile?.first_name ?: ""} ${profile?.last_name ?: ""}",
                         style = TextStyle(
                             fontFamily = poppins,
                             fontSize = 14.sp,
@@ -139,9 +148,9 @@ fun ProfileScreen(
             Spacer(Modifier.height(23.dp))
 
             CardInformation(
-                height = 180,
-                weight = 65,
-                age = 22
+                height = height,
+                weight = weight,
+                age = age
             )
 
             Spacer(Modifier.height(30.dp))
@@ -179,7 +188,14 @@ fun ProfileScreen(
                         iconImage = R.drawable.ic_profile,
                         text = "Personal Data",
                         onClick = {
-                            rootNavController.navigate(PersonalData)
+                            rootNavController.navigate(PersonalData(
+                                height = profile?.height,
+                                first_name = profile?.first_name ?: "",
+                                last_name = profile?.last_name ?: "",
+                                user_id = profile?.user_id ?: "",
+                                age = profile?.age,
+                                weight = profile?.weight
+                            ))
                         }
                     )
 
@@ -198,7 +214,9 @@ fun ProfileScreen(
                     MenuProfile(
                         iconImage = R.drawable.ic_logout,
                         text = "Log Out",
-                        onClick = {}
+                        onClick = {
+                            logoutDialog = true
+                        }
                     )
                 }
             }

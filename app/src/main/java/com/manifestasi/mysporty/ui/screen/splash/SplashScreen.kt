@@ -36,9 +36,11 @@ fun SplashScreen(
                     if (event.data){
                         onNavigateToMain()
                     }
-                } else -> {
+                }
+                is Resource.Error -> {
                     onNavigateToLogin()
                 }
+                else -> {}
             }
         }
     }

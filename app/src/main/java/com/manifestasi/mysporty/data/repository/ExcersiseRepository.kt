@@ -20,6 +20,78 @@ class ExcersiseRepository @Inject constructor(
     private val database: Postgrest
 ) {
 
+    fun updateProfileUser(
+        height: Int,
+        weight: Int,
+        age: Int,
+        firstName: String,
+        lastName: String
+    ): Flow<Resource<Profile>> = flow {
+        emit(Resource.Loading)
+        try {
+            val user = auth.currentUserOrNull()
+            if (user == null) {
+                emit(Resource.Error("User not found"))
+                return@flow
+            }
+
+            val result = database.from("profile").update(
+                {
+                    set("first_name", firstName)
+                    set("last_name", lastName)
+                    set("height", height)
+                    set("weight", weight)
+                    set("age", age)
+                }
+            ) {
+                select()
+                filter {
+                    eq("user_id", user.id)
+                }
+            }.decodeSingleOrNull<Profile>()
+
+            if (result != null) {
+                emit(Resource.Success(result))
+            } else {
+                emit(Resource.Error("Failed to update profile"))
+            }
+        } catch (e: Exception){
+            Log.e("ExcersiseRepository.updateProfileUser", e.message.toString())
+            emit(Resource.Error(e.message.toString()))
+        }
+    }.flowOn(Dispatchers.IO)
+
+    fun getProfileUser(): Flow<Resource<Profile>> = flow {
+        emit(Resource.Loading)
+        try {
+            val user = auth.currentUserOrNull()
+            Log.d("ExcersiseRepository.getProfileUser", user?.id.toString())
+            if (user == null) {
+                emit(Resource.Error("User not found"))
+                return@flow
+            }
+
+            val result = database.from("profile")
+                .select() {
+                    filter {
+                        eq("user_id", user.id)
+                    }
+                }
+                .decodeSingleOrNull<Profile>()
+
+            if (result != null) {
+                emit(Resource.Success(result))
+                Log.d("ExcersiseRepository.getProfileUser", result.toString())
+            } else {
+                emit(Resource.Error("Profile not found"))
+            }
+
+        } catch (e: Exception){
+            Log.e("ExcersiseRepository.getProfileUser", e.message.toString())
+            emit(Resource.Error(e.message.toString()))
+        }
+    }.flowOn(Dispatchers.IO)
+
     fun logout(): Flow<Resource<Boolean>> = flow {
         emit(Resource.Loading)
         try {
@@ -30,7 +102,7 @@ class ExcersiseRepository @Inject constructor(
             Log.e("ExcersiseRepository.logout", e.message.toString())
             emit(Resource.Error(e.message.toString()))
         }
-    }
+    }.flowOn(Dispatchers.IO)
 
     fun isLoggedIn(): Flow<Resource<Boolean>> = flow {
         emit(Resource.Loading)

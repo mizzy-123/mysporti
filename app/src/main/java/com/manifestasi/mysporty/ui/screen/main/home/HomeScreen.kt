@@ -1,5 +1,6 @@
 package com.manifestasi.mysporty.ui.screen.main.home
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,6 +42,7 @@ import androidx.navigation.compose.rememberNavController
 import com.manifestasi.mysporty.Detail
 import com.manifestasi.mysporty.R
 import com.manifestasi.mysporty.data.model.DataExercise
+import com.manifestasi.mysporty.data.model.Profile
 import com.manifestasi.mysporty.ui.component.card.CardBMI
 import com.manifestasi.mysporty.ui.theme.MySportyTheme
 import com.manifestasi.mysporty.ui.theme.poppins
@@ -47,8 +50,14 @@ import com.manifestasi.mysporty.util.Excersise
 
 @Composable
 fun HomeScreen(
+    isLoading: Boolean = false,
+    profile: Profile? = null,
     rootNavController: NavHostController = rememberNavController()
 ){
+    val height = (profile?.height ?: 0).toFloat()
+    val weight = (profile?.weight ?: 0).toFloat()
+
+
     Surface(modifier = Modifier.fillMaxSize().background(Color.White)) {
         Column(
             modifier = Modifier
@@ -72,7 +81,7 @@ fun HomeScreen(
             Spacer(Modifier.height(5.dp))
 
             Text(
-                text = "Stefani Wong",
+                text = if (isLoading) "Loading..." else "${profile?.first_name ?: ""} ${profile?.last_name ?: ""}",
                 style = TextStyle(
                     fontFamily = poppins,
                     fontSize = 20.sp,
@@ -82,10 +91,21 @@ fun HomeScreen(
 
             Spacer(Modifier.height(30.dp))
             
-            CardBMI(
-                height = 169f,
-                weight = 68f
-            )
+            if (profile?.height == null && profile?.weight == null){
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Please insert your Height and Weight",
+                    style = TextStyle(
+                        fontFamily = poppins,
+                        fontSize = 20.sp
+                    )
+                )
+            } else {
+                CardBMI(
+                    height = height,
+                    weight = weight
+                )
+            }
 
             Spacer(Modifier.height(30.dp))
 
@@ -177,24 +197,3 @@ fun HomeScreenPreview(){
         HomeScreen()
     }
 }
-
-//Row(
-//modifier = Modifier.fillMaxWidth(),
-//verticalAlignment = Alignment.CenterVertically
-//) {
-//    Image(
-//        painter = painterResource(R.drawable.jumping_jack),
-//        contentDescription = "jumping jack",
-//        contentScale = ContentScale.Fit, // Menggunakan Crop untuk memotong gambar
-//        modifier = Modifier.size(60.dp).clip(RoundedCornerShape(12.dp))
-//    )
-//
-//    Row (
-//        modifier = Modifier.fillMaxWidth(),
-//        verticalAlignment = Alignment.CenterVertically
-//    ) {
-//        Text(
-//            text = ""
-//        )
-//    }
-//}

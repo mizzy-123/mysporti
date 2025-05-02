@@ -2,6 +2,7 @@ package com.manifestasi.mysporty
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -14,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.manifestasi.mysporty.data.Resource
+import com.manifestasi.mysporty.data.model.Profile
 import com.manifestasi.mysporty.data.model.Tutorial
 import com.manifestasi.mysporty.ui.screen.IsLoginViewModel
 import com.manifestasi.mysporty.ui.screen.login.LoginScreen
@@ -24,11 +26,12 @@ import com.manifestasi.mysporty.ui.screen.main.profile.history.HistoryScreen
 import com.manifestasi.mysporty.ui.screen.main.profile.personaldata.PersonalDataScreen
 import com.manifestasi.mysporty.ui.screen.register.RegisterScreen
 import com.manifestasi.mysporty.ui.screen.splash.SplashScreen
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Composable
 fun MySportyApp(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
 ){
 
     NavHost(
@@ -128,10 +131,28 @@ fun MySportyApp(
             )
         }
 
-        composable<PersonalData> {
+        composable<PersonalData> { backStackEntry ->
+            val personalData = backStackEntry.toRoute<PersonalData>()
+
             PersonalDataScreen(
+                profile = Profile(
+                    user_id = personalData.user_id,
+                    first_name = personalData.first_name,
+                    last_name = personalData.last_name,
+                    height = personalData.height,
+                    weight = personalData.weight,
+                    age = personalData.age
+                ),
                 onNavigateBack = {
                     navController.popBackStack()
+                },
+                onNavigateToMain = {
+                    navController.navigate(Main){
+                        popUpTo(0) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
                 }
             )
         }
@@ -177,4 +198,11 @@ data class Pose(
 )
 
 @Serializable
-object PersonalData
+data class PersonalData(
+    val user_id: String,
+    val first_name: String,
+    val last_name: String,
+    val height: Int? = null,
+    val weight: Int? = null,
+    val age: Int? = null
+)

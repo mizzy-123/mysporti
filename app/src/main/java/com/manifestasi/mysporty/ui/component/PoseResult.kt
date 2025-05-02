@@ -1,5 +1,6 @@
 package com.manifestasi.mysporty.ui.component
 
+import android.content.Context
 import android.speech.tts.TextToSpeech
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
@@ -33,11 +34,10 @@ import java.util.Locale
 
 @Composable
 fun PoseResult(
+    context: Context,
     dataPose: Pose,
     result: Int
 ){
-
-    val context = LocalContext.current
 
     var ttsInitializeStatus by remember { mutableStateOf(false) }
 
@@ -108,7 +108,7 @@ fun PoseResult(
     }
 
     LaunchedEffect(prediction) {
-        if (isStart) {
+        if (isStart && !isComplete) {
             when(dataPose.id) {
                 "pushup" -> {
                     if (prediction == "pushup_down" && currentState == "up") {
@@ -212,6 +212,7 @@ fun PoseResult(
 fun PoseResultPreview(){
     MySportyTheme {
         PoseResult(
+            context = LocalContext.current,
             dataPose = Pose(
                 id = "",
                 repetition = 9,

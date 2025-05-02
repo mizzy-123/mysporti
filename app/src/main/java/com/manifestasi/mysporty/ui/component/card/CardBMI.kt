@@ -49,22 +49,20 @@ fun CardBMI(
     height: Float,
     weight: Float
 ){
-    val result = rememberSaveable {
-        val bmi = weight / (height * height)
-        bmi
+    val bmi = rememberSaveable(height, weight) {
+        weight / ((height / 100) * (height / 100))
     }
 
-    val resultBmi = rememberSaveable {
-        val resultBmi = when {
-            result < 18.5 -> "unnder weight"
-            result in 18.5..24.9 -> "normal weight"
-            result in 25.0..29.9 -> "over weight"
-            else -> "Obesity"
-        }
-        resultBmi
+    val resultBmi = when {
+        bmi < 18.5 -> "Underweight"
+        bmi in 18.5..24.9 -> "Normal weight"
+        bmi in 25.0..29.9 -> "Overweight"
+        else -> "Obesity"
     }
 
-    val animatedProgress by animateFloatAsState(targetValue = result, label = "progress_animation")
+    val result = String.format("%.1f", bmi)
+
+    val animatedProgress by animateFloatAsState(targetValue = bmi, label = "progress_animation")
 
 //    val offsetXTextCircleChart = if (animatedProgress <= 20)
 
@@ -229,7 +227,7 @@ fun CardBMI(
                 }
 
                 Text(
-                    text = "20,1",
+                    text = result,
                     modifier = Modifier
                         .align(Alignment.Center)
                         .offset(x = offsetXTextCircleResult.dp, y = offsetYTextCircleResult.dp),

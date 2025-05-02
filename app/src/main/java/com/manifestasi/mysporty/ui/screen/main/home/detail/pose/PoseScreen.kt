@@ -79,6 +79,7 @@ fun PoseScreen(
 
             DrawPoseLandmarks(landmarks = landmarks, modifier = Modifier.fillMaxSize())
             PoseResult(
+                context = context,
                 dataPose = dataPose,
                 result = predictedClass
             )
