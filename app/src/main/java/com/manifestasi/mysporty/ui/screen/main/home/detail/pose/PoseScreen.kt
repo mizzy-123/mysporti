@@ -13,6 +13,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 import com.manifestasi.mysporty.Pose
 import com.manifestasi.mysporty.R
@@ -26,7 +27,9 @@ import com.manifestasi.mysporty.util.Excersise
 
 @Composable
 fun PoseScreen(
-    dataPose: Pose
+    dataPose: Pose,
+    poseViewModel: PoseViewModel = hiltViewModel(),
+    onNavigateToMain: () -> Unit
 ){
     val context = LocalContext.current
     var landmarks by remember { mutableStateOf<List<NormalizedLandmark>>(emptyList()) }
@@ -81,7 +84,9 @@ fun PoseScreen(
             PoseResult(
                 context = context,
                 dataPose = dataPose,
-                result = predictedClass
+                result = predictedClass,
+                poseViewModel = poseViewModel,
+                onNavigateToMain = onNavigateToMain
             )
         }
     }
@@ -100,7 +105,8 @@ fun PoseScreenPreview(){
                 start_state = "",
                 name = "",
                 start_position_image = R.drawable.pushup_start
-            )
+            ),
+            onNavigateToMain = {}
         )
     }
 }

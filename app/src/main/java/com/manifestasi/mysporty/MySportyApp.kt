@@ -119,7 +119,15 @@ fun MySportyApp(
         composable<Pose> { backStackEntry ->
             val pose = backStackEntry.toRoute<Pose>()
             PoseScreen(
-                dataPose = pose
+                dataPose = pose,
+                onNavigateToMain = {
+                    navController.navigate(Main){
+                        popUpTo(0) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                }
             )
         }
 

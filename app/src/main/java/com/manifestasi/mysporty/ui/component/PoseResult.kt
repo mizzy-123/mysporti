@@ -9,8 +9,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -22,12 +22,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.manifestasi.mysporty.Pose
-import com.manifestasi.mysporty.data.model.DataExercise
 import com.manifestasi.mysporty.ui.component.dialog.CompleteDialog
+import com.manifestasi.mysporty.ui.component.dialog.LoadingDialog
+import com.manifestasi.mysporty.ui.screen.main.home.detail.pose.PoseViewModel
 import com.manifestasi.mysporty.ui.theme.MySportyTheme
-import com.manifestasi.mysporty.util.Excersise
 import com.manifestasi.mysporty.util.label
 import kotlinx.coroutines.delay
 import java.util.Locale
@@ -36,7 +36,9 @@ import java.util.Locale
 fun PoseResult(
     context: Context,
     dataPose: Pose,
-    result: Int
+    result: Int,
+    poseViewModel: PoseViewModel = hiltViewModel(),
+    onNavigateToMain: () -> Unit
 ){
 
     var ttsInitializeStatus by remember { mutableStateOf(false) }
@@ -70,6 +72,22 @@ fun PoseResult(
 
     var isComplete by rememberSaveable { mutableStateOf(false) }
 
+    val isLoading = poseViewModel.isLoading.collectAsState(false)
+
+    val successSave = poseViewModel.successSave.collectAsState(false)
+
+    val errorSave = poseViewModel.errorSave.collectAsState(false)
+
+    if (isLoading.value){
+        LoadingDialog()
+    }
+
+    LaunchedEffect(Unit){
+        poseViewModel.toastMessage.collect { event ->
+            Toast.makeText(context, event, Toast.LENGTH_LONG).show()
+        }
+    }
+
     // Trigger TTS hanya jika messageInstruction berubah dan beda dari sebelumnya
     LaunchedEffect(ttsInitializeStatus, messageInstruction) {
         if ((messageInstruction.isNotEmpty() && messageInstruction != lastSpokenMessage) && ttsInitializeStatus) {
@@ -86,8 +104,18 @@ fun PoseResult(
             tts.speak(repetitionCount.toString(), TextToSpeech.QUEUE_FLUSH, null, null)
         }
 
-        if (repetitionCount == dataPose.repetition+1){
+        if ((repetitionCount == dataPose.repetition+1) && !isComplete){
             isComplete = true
+            poseViewModel.saveExcersise(
+                image_name = dataPose.id,
+                name = dataPose.name,
+                repetisi = dataPose.repetition + 1
+            )
+        }
+    }
+
+    LaunchedEffect(successSave.value) {
+        if (successSave.value){
             tts.speak("Selamat", TextToSpeech.QUEUE_FLUSH, null, null)
         }
     }
@@ -156,12 +184,14 @@ fun PoseResult(
         }
     }
 
-    if (isComplete){
+    if (successSave.value || errorSave.value){
         CompleteDialog(
             title = "Selamat",
             description = "Selamat Anda berhasil menyelesaikan latihan ini",
             buttonOnclick = {
-                isComplete = false
+                poseViewModel.successSaveOnChange(false)
+                poseViewModel.errorSaveOnChange(false)
+                onNavigateToMain()
             },
             onDismiss = {}
         )
@@ -222,7 +252,8 @@ fun PoseResultPreview(){
                 start_state = "",
                 name = ""
             ),
-            result = 0
+            result = 0,
+            onNavigateToMain = {}
         )
     }
 }
