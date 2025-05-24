@@ -112,6 +112,9 @@ fun MySportyApp(
                         link = detail.link,
                         repetition = repetitionFix
                     ))
+                },
+                onNavigateBack = {
+                    navController.popBackStack()
                 }
             )
         }

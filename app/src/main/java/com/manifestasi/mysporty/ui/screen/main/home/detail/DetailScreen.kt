@@ -71,7 +71,8 @@ import kotlin.math.abs
 fun DetailScreen(
     dataDetail: Detail,
     onSelectedRepetition: (Int) -> Unit,
-    onNavigateToPose: () -> Unit
+    onNavigateToPose: () -> Unit,
+    onNavigateBack: () -> Unit
 ){
     val dataRepetition = dataDetail.repetition
     val list = (1..dataRepetition).toList() // Data yang akan ditampilkan (misal angka repetisi)
@@ -118,7 +119,7 @@ fun DetailScreen(
         )
     ) {
         IconButton(
-            onClick = {}
+            onClick = onNavigateBack
         ) {
             Image(
                 painter = painterResource(R.drawable.back_navs),
@@ -146,16 +147,16 @@ fun DetailScreen(
             )
         )
 
-        Spacer(Modifier.height(5.dp))
-
-        Text(
-            text = "390 Calories Burn",
-            style = TextStyle(
-                fontFamily = poppins,
-                fontSize = 12.sp,
-                color = GrayColor1
-            )
-        )
+//        Spacer(Modifier.height(5.dp))
+//
+//        Text(
+//            text = "390 Calories Burn",
+//            style = TextStyle(
+//                fontFamily = poppins,
+//                fontSize = 12.sp,
+//                color = GrayColor1
+//            )
+//        )
 
         Spacer(Modifier.height(30.dp))
 
@@ -401,7 +402,8 @@ fun DetailScreenPreview(){
                 repetition = 4
             ),
             onSelectedRepetition = {},
-            onNavigateToPose = {}
+            onNavigateToPose = {},
+            onNavigateBack = {}
         )
     }
 }
