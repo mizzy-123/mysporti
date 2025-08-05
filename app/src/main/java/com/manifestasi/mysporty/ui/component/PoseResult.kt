@@ -5,6 +5,7 @@ import android.speech.tts.TextToSpeech
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -21,12 +22,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.manifestasi.mysporty.Pose
 import com.manifestasi.mysporty.ui.component.dialog.CompleteDialog
 import com.manifestasi.mysporty.ui.component.dialog.LoadingDialog
 import com.manifestasi.mysporty.ui.screen.main.home.detail.pose.PoseViewModel
+import com.manifestasi.mysporty.ui.theme.BlueColor1
 import com.manifestasi.mysporty.ui.theme.MySportyTheme
 import com.manifestasi.mysporty.util.label
 import kotlinx.coroutines.delay
@@ -200,10 +203,19 @@ fun PoseResult(
     Box(modifier = Modifier.fillMaxSize()){
         Text(
             "Hasil: $prediction",
-            modifier = Modifier.align(Alignment.TopStart),
+            modifier = Modifier.align(Alignment.TopStart).offset(y = 20.dp, x = 10.dp),
             style = TextStyle(
                 fontSize = 20.sp,
-                color = Color.Red
+                color = BlueColor1
+            )
+        )
+
+        Text(
+            "Repetition count: " + repetitionCount.toString(),
+            modifier = Modifier.align(Alignment.TopEnd).offset(y = 20.dp, x = -(10.dp)),
+            style = TextStyle(
+                fontSize = 20.sp,
+                color = BlueColor1
             )
         )
 
@@ -213,7 +225,7 @@ fun PoseResult(
                 modifier = Modifier.align(Alignment.Center),
                 style = TextStyle(
                     fontSize = 40.sp,
-                    color = Color.Red
+                    color = BlueColor1
                 )
             )
         } else {
@@ -222,7 +234,7 @@ fun PoseResult(
                 modifier = Modifier.align(Alignment.Center),
                 style = TextStyle(
                     fontSize = 40.sp,
-                    color = Color.Red
+                    color = BlueColor1
                 )
             )
         }

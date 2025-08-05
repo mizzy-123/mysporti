@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
+import com.manifestasi.mysporty.ui.theme.BlueColor1
 
 @Composable
 fun DrawPoseLandmarks(landmarks: List<NormalizedLandmark>, modifier: Modifier = Modifier) {
@@ -31,7 +32,7 @@ fun DrawPoseLandmarks(landmarks: List<NormalizedLandmark>, modifier: Modifier = 
         landmarks.forEach { landmark ->
             val radius = 8f * (1 - landmark.z()) // Sesuaikan radius berdasarkan nilai z
             drawCircle(
-                color = Color.Red,
+                color = BlueColor1,
                 radius = radius,
                 center = Offset(
                     landmark.x() * size.width,
@@ -48,7 +49,7 @@ fun DrawPoseLandmarks(landmarks: List<NormalizedLandmark>, modifier: Modifier = 
             if (startLandmark != null && endLandmark != null) {
                 val strokeWidth = 4f * (1 - (startLandmark.z() + endLandmark.z()) / 2) // Sesuaikan ketebalan garis
                 drawLine(
-                    color = Color.Blue,
+                    color = Color.White,
                     start = Offset(startLandmark.x() * size.width, startLandmark.y() * size.height),
                     end = Offset(endLandmark.x() * size.width, endLandmark.y() * size.height),
                     strokeWidth = strokeWidth
